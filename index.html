@@ -8,18 +8,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-    /* ALL YOUR ORIGINAL SMOOTH CSS STYLES */
-    :root {
-        --vh: 1vh; --primary: #007aff; --success: #34c759; --warning: #ff9500; --danger: #ff3b30;
-        --ios-bg: #f2f2f7; --glass-bg: rgba(255, 255, 255, 0.65); --glass-border: rgba(255, 255, 255, 0.5);
-        --text-main: #1c1c1e; --text-sub: #8e8e93; --input-bg: rgba(0, 0, 0, 0.04); --card-bg: #ffffff; 
-        --spring: cubic-bezier(0.34, 1.56, 0.64, 1); --app-launch: cubic-bezier(0.25, 1, 0.5, 1);
-        --click-x: 50vw; --click-y: 50vh;
-    }
-    html.dark-mode {
-        --ios-bg: #000000; --glass-bg: rgba(25, 25, 25, 0.45); --glass-border: rgba(255, 255, 255, 0.15);
-        --text-main: #ffffff; --text-sub: #ebebf5; --input-bg: rgba(255, 255, 255, 0.1); --card-bg: #1c1c1e; color-scheme: dark;
-    }
+    /* =========================================
+       1. GLOBAL STYLES & TYPOGRAPHY
+       ========================================= */
+    :root { --vh: 1vh; --primary: #007aff; --success: #34c759; --warning: #ff9500; --danger: #ff3b30; --ios-bg: #f2f2f7; --glass-bg: rgba(255, 255, 255, 0.65); --glass-border: rgba(255, 255, 255, 0.5); --text-main: #1c1c1e; --text-sub: #8e8e93; --input-bg: rgba(0, 0, 0, 0.04); --card-bg: #ffffff; --spring: cubic-bezier(0.34, 1.56, 0.64, 1); --app-launch: cubic-bezier(0.25, 1, 0.5, 1); --click-x: 50vw; --click-y: 50vh; }
+    html.dark-mode { --ios-bg: #000000; --glass-bg: rgba(25, 25, 25, 0.45); --glass-border: rgba(255, 255, 255, 0.15); --text-main: #ffffff; --text-sub: #ebebf5; --input-bg: rgba(255, 255, 255, 0.1); --card-bg: #1c1c1e; color-scheme: dark; }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-font-smoothing: antialiased; }
     input, select, textarea { -webkit-user-select: auto !important; user-select: auto !important; }
     body { height: 100vh; height: calc(var(--vh, 1vh) * 100); width: 100%; overflow: hidden; position: fixed; top: 0; left: 0; background-color: var(--ios-bg); color: var(--text-main); transition: background-color 0.4s ease; }
@@ -74,37 +67,19 @@
 
     <!-- HOME TAB -->
     <div id="sec1" class="section active">
-        <div class="pill-header glass-panel">
-            DASHBOARD ADMIN
-            <button class="btn-icon" onclick="openModal(event, 'addCustomerModal')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
-        </div>
+        <div class="pill-header glass-panel">DASHBOARD ADMIN <button class="btn-icon" onclick="openModal(event, 'addCustomerModal')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button></div>
         <div class="dash-grid">
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'customers')">
-                <div class="icon" style="background:rgba(0,122,255,0.15); color:var(--primary);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
-                <h4>CUSTOMERS</h4><h2 id="dash-cust">0</h2>
-            </div>
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'revenue')">
-                <div class="icon" style="background:rgba(52,199,89,0.15); color:var(--success);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
-                <h4>TOTAL REVENUE</h4><h2 id="dash-rev">₹0</h2>
-            </div>
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'pending')">
-                <div class="icon" style="background:rgba(255,149,0,0.15); color:var(--warning);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
-                <h4>PENDING AMOUNT</h4><h2 id="dash-pend">₹0</h2>
-            </div>
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'expenses')">
-                <div class="icon" style="background:rgba(255,59,48,0.15); color:var(--danger);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM11 7h2v4h4v2h-6V7z"/></svg></div>
-                <h4>EXPENSES</h4><h2 id="dash-exp">₹0</h2>
-            </div>
+            <div class="dash-card glass-panel" onclick="openFSModal(event, 'customers')"><div class="icon" style="background:rgba(0,122,255,0.15); color:var(--primary);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div><h4>CUSTOMERS</h4><h2 id="dash-cust">0</h2></div>
+            <div class="dash-card glass-panel" onclick="openFSModal(event, 'revenue')"><div class="icon" style="background:rgba(52,199,89,0.15); color:var(--success);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><h4>TOTAL REVENUE</h4><h2 id="dash-rev">₹0</h2></div>
+            <div class="dash-card glass-panel" onclick="openFSModal(event, 'pending')"><div class="icon" style="background:rgba(255,149,0,0.15); color:var(--warning);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div><h4>PENDING AMOUNT</h4><h2 id="dash-pend">₹0</h2></div>
+            <div class="dash-card glass-panel" onclick="openFSModal(event, 'expenses')"><div class="icon" style="background:rgba(255,59,48,0.15); color:var(--danger);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM11 7h2v4h4v2h-6V7z"/></svg></div><h4>EXPENSES</h4><h2 id="dash-exp">₹0</h2></div>
         </div>
         <div class="analytics-section"><div class="circle-chart"><svg viewBox="0 0 42 42" class="circular-chart"><path class="circle-bg" stroke="var(--primary)" d="M21 2 a 19 19 0 1 1 0 38 a 19 19 0 1 1 0 -38"/><path class="circle" id="ring-cust" stroke="var(--primary)" stroke-dasharray="0, 120" d="M21 2 a 19 19 0 1 1 0 38 a 19 19 0 1 1 0 -38"/><path class="circle-bg" stroke="var(--success)" d="M21 6 a 15 15 0 1 1 0 30 a 15 15 0 1 1 0 -30"/><path class="circle" id="ring-rev" stroke="var(--success)" stroke-dasharray="0, 95" d="M21 6 a 15 15 0 1 1 0 30 a 15 15 0 1 1 0 -30"/><path class="circle-bg" stroke="var(--warning)" d="M21 10 a 11 11 0 1 1 0 22 a 11 11 0 1 1 0 -22"/><path class="circle" id="ring-pend" stroke="var(--warning)" stroke-dasharray="0, 70" d="M21 10 a 11 11 0 1 1 0 22 a 11 11 0 1 1 0 -22"/><path class="circle-bg" stroke="var(--danger)" d="M21 14 a 7 7 0 1 1 0 14 a 7 7 0 1 1 0 -14"/><path class="circle" id="ring-exp" stroke="var(--danger)" stroke-dasharray="0, 44" d="M21 14 a 7 7 0 1 1 0 14 a 7 7 0 1 1 0 -14"/></svg></div></div>
     </div>
 
     <!-- CLIENTS TAB -->
     <div id="sec2" class="section">
-        <div class="search-bar glass-panel">
-            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            <input type="text" id="search-cust" placeholder="SEARCH CUSTOMER..." oninput="renderCustomers()">
-        </div>
+        <div class="search-bar glass-panel"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input type="text" id="search-cust" placeholder="SEARCH CUSTOMER..." oninput="renderCustomers()"></div>
         <div id="customer-list"></div>
     </div>
 
@@ -133,104 +108,21 @@
     <div class="modal-overlay" id="customConfirmOverlay" style="z-index: 3000;">
         <div class="modal-wrapper" onclick="closeConfirm()">
             <div class="modal-box glass-panel" style="max-width: 320px; padding: 24px;" onclick="event.stopPropagation()">
-                <div class="modal-title" style="color: var(--danger); margin-bottom: 15px;">WARNING</div>
-                <p id="confirmMessage" style="text-align: center; font-size: 15px; margin-bottom: 25px; font-weight: 700;"></p>
-                <div style="display: flex; gap: 12px;">
-                    <button class="btn setting-btn" style="flex: 1; margin: 0; padding: 12px; font-size: 13px;" onclick="closeConfirm()">CANCEL</button>
-                    <button class="btn danger-btn" style="flex: 1; margin: 0; padding: 12px; font-size: 13px; box-shadow: none;" id="confirmBtn">CONFIRM</button>
-                </div>
+                <div class="modal-title" style="color: var(--danger); margin-bottom: 15px;">WARNING</div><p id="confirmMessage" style="text-align: center; font-size: 15px; margin-bottom: 25px; font-weight: 700;"></p>
+                <div style="display: flex; gap: 12px;"><button class="btn setting-btn" style="flex: 1; margin: 0; padding: 12px; font-size: 13px;" onclick="closeConfirm()">CANCEL</button><button class="btn danger-btn" style="flex: 1; margin: 0; padding: 12px; font-size: 13px; box-shadow: none;" id="confirmBtn">CONFIRM</button></div>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="addCustomerModal">
-        <div class="modal-wrapper" onclick="closeModals(event)">
-            <div class="modal-box glass-panel" onclick="event.stopPropagation()">
-                <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-                <div class="modal-title">NEW CUSTOMER DATA</div>
-                <div class="input-group"><input type="text" id="c-name" placeholder="CUSTOMER NAME"></div>
-                <div class="input-group"><input type="number" id="c-mobile" placeholder="MOBILE NUMBER"></div>
-                <div class="input-group"><input type="text" id="c-item" placeholder="ITEM NAME"></div>
-                <div style="display:flex; gap:12px;">
-                    <div class="input-group" style="flex:1"><input type="number" id="c-qty" placeholder="QUANTITY" oninput="calcCust()"></div>
-                    <div class="input-group" style="flex:1"><input type="number" id="c-rate" placeholder="RATE (₹)" oninput="calcCust()"></div>
-                </div>
-                <div class="input-group"><input type="number" id="c-adv" placeholder="ADVANCE RECEIVED (₹)" oninput="calcCust()"></div>
-                <div class="live-calc-box"><div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="c-total-txt">₹0</span></div><div class="calc-row"><span>RECEIVED:</span> <span id="c-recv-txt">₹0</span></div><div class="calc-row total"><span>PENDING DUE:</span> <span id="c-pend-txt">₹0</span></div></div>
-                <button class="btn" onclick="saveCustomer()">SAVE CUSTOMER</button>
-            </div>
-        </div>
-    </div>
+    <div class="modal-overlay" id="addCustomerModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">NEW CUSTOMER DATA</div><div class="input-group"><input type="text" id="c-name" placeholder="CUSTOMER NAME"></div><div class="input-group"><input type="number" id="c-mobile" placeholder="MOBILE NUMBER"></div><div class="input-group"><input type="text" id="c-item" placeholder="ITEM NAME"></div><div style="display:flex; gap:12px;"><div class="input-group" style="flex:1"><input type="number" id="c-qty" placeholder="QUANTITY" oninput="calcCust()"></div><div class="input-group" style="flex:1"><input type="number" id="c-rate" placeholder="RATE (₹)" oninput="calcCust()"></div></div><div class="input-group"><input type="number" id="c-adv" placeholder="ADVANCE RECEIVED (₹)" oninput="calcCust()"></div><div class="live-calc-box"><div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="c-total-txt">₹0</span></div><div class="calc-row"><span>RECEIVED:</span> <span id="c-recv-txt">₹0</span></div><div class="calc-row total"><span>PENDING DUE:</span> <span id="c-pend-txt">₹0</span></div></div><button class="btn" onclick="saveCustomer()">SAVE CUSTOMER</button></div></div></div>
+    <div class="modal-overlay" id="updateCustModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title" id="up-cust-name">NAME</div><input type="hidden" id="up-cust-id"><div class="live-calc-box" style="margin-bottom: 20px;"><div class="calc-row"><span>CURRENT PENDING:</span> <span id="up-pend-txt" style="color:#ffb3b3;">₹0</span></div><div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="up-total-txt">₹0</span></div><div class="calc-row"><span>TOTAL RECEIVED:</span> <span id="up-recv-txt">₹0</span></div></div><div style="text-align:center; font-size:12px; color:var(--text-sub); margin-bottom:15px; font-weight:700;"><div id="up-item-details">ITEM: NONE | QTY: 0 | RATE: ₹0</div><div id="up-date-details">DATE: N/A</div></div><div class="input-group"><input type="number" id="up-amount-paid" placeholder="ENTER NEW AMOUNT PAID (₹)"></div><button class="btn" onclick="processPayment()">UPDATE PAYMENT</button></div></div></div>
+    <div class="modal-overlay" id="addWorkerModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">ADD NEW WORKER</div><div class="input-group"><input type="text" id="w-name" placeholder="WORKER NAME"></div><button class="btn" onclick="saveWorker()">SAVE WORKER</button></div></div></div>
+    <div class="modal-overlay" id="attendanceModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title" id="att-worker-name">MARK ATTENDANCE</div><input type="hidden" id="att-worker-id"><div style="display:flex; gap:12px; margin-bottom: 8px;"><div style="flex:1;"><label class="setting-label">TIME IN</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timein"></div></div><div style="flex:1;"><label class="setting-label">TIME OUT</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timeout"></div></div></div><label class="setting-label" style="margin-top:10px;">GIVE ADVANCE</label><div class="input-group"><input type="number" id="att-advance" placeholder="ADVANCE AMOUNT (₹)"></div><button class="btn" style="margin-bottom:15px;" onclick="saveAdvanceOnly()">SAVE TIME & ADVANCE ONLY</button><hr><button class="att-btn present" onclick="markAttendance('PRESENT')">MARK PRESENT</button><button class="att-btn half" onclick="markAttendance('HALF DAY')">MARK HALF DAY</button><button class="att-btn absent" onclick="markAttendance('ABSENT')">MARK ABSENT</button></div></div></div>
+    <div class="modal-overlay" id="addExpenseModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">ADD EXPENSE</div><div class="input-group"><select id="e-type"><option value="LABOUR COST">LABOUR COST</option><option value="RAW MATERIAL">RAW MATERIAL</option><option value="ELECTRICITY">ELECTRICITY</option><option value="TRANSPORT">TRANSPORT</option><option value="OTHER">OTHER</option></select></div><div class="input-group"><input type="number" id="e-amount" placeholder="AMOUNT (₹)"></div><div class="input-group"><input type="date" id="e-date"></div><button class="btn" onclick="saveExpense()">DONE</button></div></div></div>
+    <div class="modal-overlay" id="timingModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">SET DEFAULT TIMINGS</div><label class="setting-label">DEFAULT TIME IN</label><div class="input-group"><input type="time" id="s-timein"></div><label class="setting-label">DEFAULT TIME OUT</label><div class="input-group"><input type="time" id="s-timeout"></div><label class="setting-label">HALF DAY TIME</label><div class="input-group"><input type="time" id="s-halfday"></div><button class="btn" onclick="saveSettings()">SAVE TIMINGS</button></div></div></div>
+    <div class="modal-overlay" id="printDataModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">DOWNLOAD IMAGE DATA</div><button class="att-btn excel-opt" onclick="exportDataImage(event, 'customers')">DOWNLOAD CUSTOMERS DATA</button><button class="att-btn excel-opt" onclick="exportDataImage(event, 'expenses')">DOWNLOAD EXPENSES DATA</button><button class="att-btn excel-opt" onclick="exportDataImage(event, 'workers')">DOWNLOAD WORKERS DATA</button></div></div></div>
 
-    <div class="modal-overlay" id="updateCustModal">
-        <div class="modal-wrapper" onclick="closeModals(event)">
-            <div class="modal-box glass-panel" onclick="event.stopPropagation()">
-                <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-                <div class="modal-title" id="up-cust-name">NAME</div><input type="hidden" id="up-cust-id">
-                <div class="live-calc-box" style="margin-bottom: 20px;"><div class="calc-row"><span>CURRENT PENDING:</span> <span id="up-pend-txt" style="color:#ffb3b3;">₹0</span></div><div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="up-total-txt">₹0</span></div><div class="calc-row"><span>TOTAL RECEIVED:</span> <span id="up-recv-txt">₹0</span></div></div>
-                <div style="text-align:center; font-size:12px; color:var(--text-sub); margin-bottom:15px; font-weight:700;"><div id="up-item-details">ITEM: NONE | QTY: 0 | RATE: ₹0</div><div id="up-date-details">DATE: N/A</div></div>
-                <div class="input-group"><input type="number" id="up-amount-paid" placeholder="ENTER NEW AMOUNT PAID (₹)"></div>
-                <button class="btn" onclick="processPayment()">UPDATE PAYMENT</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="addWorkerModal">
-        <div class="modal-wrapper" onclick="closeModals(event)">
-            <div class="modal-box glass-panel" onclick="event.stopPropagation()">
-                <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-                <div class="modal-title">ADD NEW WORKER</div><div class="input-group"><input type="text" id="w-name" placeholder="WORKER NAME"></div><button class="btn" onclick="saveWorker()">SAVE WORKER</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="attendanceModal">
-        <div class="modal-wrapper" onclick="closeModals(event)">
-            <div class="modal-box glass-panel" onclick="event.stopPropagation()">
-                <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-                <div class="modal-title" id="att-worker-name">MARK ATTENDANCE</div><input type="hidden" id="att-worker-id">
-                <div style="display:flex; gap:12px; margin-bottom: 8px;"><div style="flex:1;"><label class="setting-label">TIME IN</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timein"></div></div><div style="flex:1;"><label class="setting-label">TIME OUT</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timeout"></div></div></div>
-                <label class="setting-label" style="margin-top:10px;">GIVE ADVANCE</label><div class="input-group"><input type="number" id="att-advance" placeholder="ADVANCE AMOUNT (₹)"></div>
-                <button class="btn" style="margin-bottom:15px;" onclick="saveAdvanceOnly()">SAVE TIME & ADVANCE ONLY</button><hr>
-                <button class="att-btn present" onclick="markAttendance('PRESENT')">MARK PRESENT</button><button class="att-btn half" onclick="markAttendance('HALF DAY')">MARK HALF DAY</button><button class="att-btn absent" onclick="markAttendance('ABSENT')">MARK ABSENT</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="addExpenseModal">
-        <div class="modal-wrapper" onclick="closeModals(event)">
-            <div class="modal-box glass-panel" onclick="event.stopPropagation()">
-                <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-                <div class="modal-title">ADD EXPENSE</div>
-                <div class="input-group"><select id="e-type"><option value="LABOUR COST">LABOUR COST</option><option value="RAW MATERIAL">RAW MATERIAL</option><option value="ELECTRICITY">ELECTRICITY</option><option value="TRANSPORT">TRANSPORT</option><option value="OTHER">OTHER</option></select></div>
-                <div class="input-group"><input type="number" id="e-amount" placeholder="AMOUNT (₹)"></div><div class="input-group"><input type="date" id="e-date"></div><button class="btn" onclick="saveExpense()">DONE</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="timingModal">
-        <div class="modal-wrapper" onclick="closeModals(event)">
-            <div class="modal-box glass-panel" onclick="event.stopPropagation()">
-                <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-                <div class="modal-title">SET DEFAULT TIMINGS</div><label class="setting-label">DEFAULT TIME IN</label><div class="input-group"><input type="time" id="s-timein"></div><label class="setting-label">DEFAULT TIME OUT</label><div class="input-group"><input type="time" id="s-timeout"></div><label class="setting-label">HALF DAY TIME</label><div class="input-group"><input type="time" id="s-halfday"></div><button class="btn" onclick="saveSettings()">SAVE TIMINGS</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="printDataModal">
-        <div class="modal-wrapper" onclick="closeModals(event)">
-            <div class="modal-box glass-panel" onclick="event.stopPropagation()">
-                <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-                <div class="modal-title">DOWNLOAD IMAGE DATA</div>
-                <button class="att-btn excel-opt" onclick="exportDataImage(event, 'customers')">DOWNLOAD CUSTOMERS DATA</button><button class="att-btn excel-opt" onclick="exportDataImage(event, 'expenses')">DOWNLOAD EXPENSES DATA</button><button class="att-btn excel-opt" onclick="exportDataImage(event, 'workers')">DOWNLOAD WORKERS DATA</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="fs-modal glass-panel" id="fsModal" style="border-radius:0; border:none;">
-        <div class="fs-header glass-panel" style="border-radius:0; border-top:none; border-left:none; border-right:none;"><h2 id="fs-title">DATA</h2><button class="close-modal-btn" style="position:static;" onclick="closeFSModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
-        <div class="fs-content" id="fs-content"></div>
-    </div>
+    <div class="fs-modal glass-panel" id="fsModal" style="border-radius:0; border:none;"><div class="fs-header glass-panel" style="border-radius:0; border-top:none; border-left:none; border-right:none;"><h2 id="fs-title">DATA</h2><button class="close-modal-btn" style="position:static;" onclick="closeFSModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div><div class="fs-content" id="fs-content"></div></div>
 
     <nav class="bottom-nav glass-panel">
         <div class="nav-item active" onclick="switchTab(1, this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>HOME</span></div>
@@ -242,10 +134,10 @@
 </div>
 <div id="export-container"></div>
 
-<!-- FIREBASE INTEGRATION -->
+<!-- CLOUD FIRESTORE INTEGRATION (ADMIN) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyATj9_cJpq0aWsUqqLzPSC-SWPtBuEagwc",
@@ -257,16 +149,16 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const dbRef = ref(db, 'techAsarData');
+    const db = getFirestore(app);
+    const docRef = doc(db, 'appData', 'techAsar'); // Using Firestore Document
 
     window.appData = { customers: [], workers: [], expenses: [], settings: { timeIn: '', timeOut: '', halfDay: '', darkMode: false, theme: '#007aff'} };
     let initialLoad = true;
 
-    // Real-time Data Fetching
-    onValue(dbRef, (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
+    // Real-time Data Fetching (FIRESTORE)
+    onSnapshot(docRef, (docSnap) => {
+        if (docSnap.exists()) {
+            const val = docSnap.data();
             window.appData = {
                 customers: val.customers || [],
                 workers: val.workers || [],
@@ -288,9 +180,9 @@
         updateDashboard(); renderCustomers(); renderWorkers(); renderExpenses();
     });
 
-    // Save Data Function overrides local storage
+    // Save Data to FIRESTORE
     window.saveData = function() {
-        set(dbRef, window.appData);
+        setDoc(docRef, window.appData);
     };
 
     window.toggleDarkMode = function() {
