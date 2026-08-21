@@ -46,7 +46,8 @@
     /* =========================================
        2. CLEAN LAYOUT & BOTTOM LOCKED NAV
        ========================================= */
-    .section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: max(env(safe-area-inset-top), 30px) 20px calc(env(safe-area-inset-bottom) + 85px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.4s var(--app-launch), visibility 0.4s; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; will-change: opacity, transform, visibility; }
+    /* Adjusted top padding to fix App Creator 24 spacing issue */
+    .section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: max(env(safe-area-inset-top), 10px) 20px calc(env(safe-area-inset-bottom) + 85px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.4s var(--app-launch), visibility 0.4s; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; will-change: opacity, transform, visibility; }
     .section.active { opacity: 1; visibility: visible; transform: translate3d(0,0,0); z-index: 10; }
     .section.slide-left { transform: translate3d(-40px, 0, 0); } .section.slide-right { transform: translate3d(40px, 0, 0); } .section::-webkit-scrollbar { display: none; }
     
@@ -438,7 +439,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const docRef = doc(db, 'appData', 'techAsar'); 
-    const backupDocRef = doc(db, 'appData', 'techAsar_backup'); // Manual Backup Doc
+    const backupDocRef = doc(db, 'appData', 'techAsar_backup'); 
 
     window.appData = { customers: [], workers: [], expenses: [], settings: { timeIn: '', timeOut: '', halfDay: '' } };
     let isInitialLoad = true;
@@ -448,7 +449,7 @@
     document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { disableNetwork(db).then(() => enableNetwork(db)); } });
     window.addEventListener("online", () => { disableNetwork(db).then(() => enableNetwork(db)); });
 
-    // REAL-TIME AUTO SYNC (Auto Cloud Backup on Save)
+    // REAL-TIME AUTO SYNC
     onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
             const val = docSnap.data();
@@ -530,7 +531,6 @@
         countUpAnimation(document.getElementById('dash-exp'), 0, totalExp, 1000, "₹"); 
     };
 
-    // Sleek Admin Renderings (Hiding detailed info in list, showing in modal)
     window.renderCustomers = function(isInit) { 
         const list = document.getElementById('customer-list'); let htmlBatch = ''; 
         if(window.appData.customers.length === 0) { list.innerHTML = '<div class="empty-state">NO CLIENTS FOUND</div>'; return; }
@@ -612,7 +612,6 @@
     
     window.openUpdateCustModal = function(e, id, el) { if(el && el.classList.contains('swiped')) return; const c = window.appData.customers.find(x => x.id === id); if(!c) return; document.getElementById('up-cust-id').value = c.id; document.getElementById('up-cust-name').innerText = c.name; document.getElementById('up-pend-txt').innerText = "₹" + c.pending; document.getElementById('up-total-txt').innerText = "₹" + c.total; document.getElementById('up-recv-txt').innerText = "₹" + c.advance; document.getElementById('up-item-details').innerText = `ITEM: ${c.item} | QTY: ${c.qty} | RATE: ₹${c.rate}`; document.getElementById('up-amount-paid').value = ''; window.openModal(e, 'updateCustModal'); };
     
-    // Validated Payment
     window.processPayment = function() { 
         const id = parseInt(document.getElementById('up-cust-id').value); 
         const paid = parseFloat(document.getElementById('up-amount-paid').value) || 0; 
@@ -641,34 +640,17 @@
     window.saveSettings = function() { window.appData.settings.timeIn = document.getElementById('s-timein').value; window.appData.settings.timeOut = document.getElementById('s-timeout').value; window.appData.settings.halfDay = document.getElementById('s-halfday').value; window.saveData(); window.forceCloseModals(); window.showToast("TIMINGS SAVED"); };
     window.clearAllData = function(e) { window.showCustomConfirm(e, "THIS WILL DELETE ALL DATA FOREVER!", () => { window.appData.customers = []; window.appData.workers = []; window.appData.expenses = []; window.saveData(); window.showToast("ALL DATA CLEARED"); }); };
 
-    // Manual Cloud Backup & Restore
     window.manualCloudBackup = function(e) {
         window.showCustomConfirm(e, "CREATE A MANUAL CLOUD SNAPSHOT?", () => {
             window.showToast("BACKING UP...");
-            setDoc(backupDocRef, window.appData).then(() => {
-                window.showToast("CLOUD BACKUP SUCCESSFUL");
-            }).catch(err => {
-                window.showToast("BACKUP FAILED");
-                console.error(err);
-            });
+            setDoc(backupDocRef, window.appData).then(() => { window.showToast("CLOUD BACKUP SUCCESSFUL"); }).catch(err => { window.showToast("BACKUP FAILED"); console.error(err); });
         });
     };
 
     window.manualCloudRestore = function(e) {
         window.showCustomConfirm(e, "RESTORE DATA FROM CLOUD? THIS WILL OVERWRITE CURRENT APP DATA.", () => {
             window.showToast("RESTORING DATA...");
-            getDoc(backupDocRef).then((docSnap) => {
-                if (docSnap.exists()) {
-                    window.appData = docSnap.data();
-                    window.saveData();
-                    window.showToast("RESTORE SUCCESSFUL");
-                } else {
-                    window.showToast("NO CLOUD BACKUP FOUND");
-                }
-            }).catch(err => {
-                window.showToast("RESTORE FAILED");
-                console.error(err);
-            });
+            getDoc(backupDocRef).then((docSnap) => { if (docSnap.exists()) { window.appData = docSnap.data(); window.saveData(); window.showToast("RESTORE SUCCESSFUL"); } else { window.showToast("NO CLOUD BACKUP FOUND"); } }).catch(err => { window.showToast("RESTORE FAILED"); console.error(err); });
         });
     };
 
