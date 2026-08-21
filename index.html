@@ -3,141 +3,459 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Tech Asar App - ADMIN</title>
+<title>Tech Asar - ADMIN PRO</title>
 <meta name="color-scheme" content="light dark">
+
+<!-- HTML2Canvas library for Ultra HD Image Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
     /* =========================================
-       1. GLOBAL STYLES & TYPOGRAPHY
+       1. PROFESSIONAL PREMIUM VARIABLES
        ========================================= */
-    :root { --vh: 1vh; --primary: #007aff; --success: #34c759; --warning: #ff9500; --danger: #ff3b30; --ios-bg: #f2f2f7; --glass-bg: rgba(255, 255, 255, 0.65); --glass-border: rgba(255, 255, 255, 0.5); --text-main: #1c1c1e; --text-sub: #8e8e93; --input-bg: rgba(0, 0, 0, 0.04); --card-bg: #ffffff; --spring: cubic-bezier(0.34, 1.56, 0.64, 1); --app-launch: cubic-bezier(0.25, 1, 0.5, 1); --click-x: 50vw; --click-y: 50vh; }
-    html.dark-mode { --ios-bg: #000000; --glass-bg: rgba(25, 25, 25, 0.45); --glass-border: rgba(255, 255, 255, 0.15); --text-main: #ffffff; --text-sub: #ebebf5; --input-bg: rgba(255, 255, 255, 0.1); --card-bg: #1c1c1e; color-scheme: dark; }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-font-smoothing: antialiased; }
-    input, select, textarea { -webkit-user-select: auto !important; user-select: auto !important; }
-    body { height: 100vh; height: calc(var(--vh, 1vh) * 100); width: 100%; overflow: hidden; position: fixed; top: 0; left: 0; background-color: var(--ios-bg); color: var(--text-main); transition: background-color 0.4s ease; }
-    .bg-mesh { position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 20% 30%, rgba(0, 122, 255, 0.12), transparent 40%), radial-gradient(circle at 80% 80%, rgba(52, 199, 89, 0.12), transparent 40%), radial-gradient(circle at 80% 20%, rgba(255, 45, 85, 0.08), transparent 40%); z-index: -1; pointer-events: none; animation: pulse 15s ease-in-out infinite alternate; will-change: transform; transform: translateZ(0); }
-    html.dark-mode .bg-mesh { background: radial-gradient(circle at 20% 30%, rgba(0, 122, 255, 0.25), transparent 40%), radial-gradient(circle at 80% 80%, rgba(52, 199, 89, 0.25), transparent 40%), radial-gradient(circle at 80% 20%, rgba(255, 45, 85, 0.2), transparent 40%); }
-    @keyframes pulse { 0% { transform: scale(1) translate3d(0,0,0); } 100% { transform: scale(1.05) translate3d(-2%, 2%, 0); } }
-    #app { width: 100%; max-width: 500px; height: 100%; position: absolute; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; overflow: hidden; }
-    .glass-panel { background: var(--glass-bg); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px rgba(0,0,0,0.06); transform: translateZ(0); }
-    .section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: max(env(safe-area-inset-top), 20px) 20px calc(env(safe-area-inset-bottom) + 90px); opacity: 0; visibility: hidden; transition: opacity 0.4s var(--app-launch), transform 0.4s var(--app-launch), visibility 0.4s; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; will-change: opacity, transform, visibility; }
-    .section.active { opacity: 1; visibility: visible; transform: translate3d(0,0,0); z-index: 10; }
-    .section.slide-left { transform: translate3d(-50px, 0, 0); } .section.slide-right { transform: translate3d(50px, 0, 0); } .section::-webkit-scrollbar { display: none; }
-    .bottom-nav { position: absolute; bottom: max(env(safe-area-inset-bottom), 12px); left: 15px; right: 15px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; z-index: 1000; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 8px; border-radius: 16px; gap: 4px; color: var(--text-sub); cursor: pointer; transition: 0.2s ease; flex: 1; }
-    .nav-item.active { color: var(--primary); } .nav-item span { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2px;} .nav-item svg { width: 22px; height: 22px; fill: currentColor; transition: transform 0.4s var(--spring); } .nav-item.active svg { transform: scale(1.15) translate3d(0,-2px,0); }
-    .pill-header { position: sticky; top: 0; z-index: 20; margin: 0 -5px 15px -5px; padding: 12px 20px; border-radius: 20px; font-size: 20px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
-    .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 5px; flex-shrink: 0;}
-    .dash-card { border-radius: 20px; padding: 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; cursor: pointer; transition: transform 0.2s var(--app-launch), box-shadow 0.2s; }
-    .dash-card:active { transform: scale(0.92) !important; } .dash-card .icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; } .dash-card h4 { font-size: 11px; color: var(--text-sub); font-weight: 700; margin-bottom: 2px; text-transform: uppercase;} .dash-card h2 { font-size: 20px; font-weight: 700; color: var(--text-main); }
-    .swipe-container { position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 12px; background: transparent; }
-    .delete-bg { position: absolute; top: 0; right: 0; height: 100%; width: 100px; background: var(--danger); border-radius: 16px; display: flex; align-items: center; justify-content: flex-end; padding-right: 20px; color: white; cursor: pointer; z-index: 1;} .delete-bg svg { width: 24px; height: 24px; fill: white; }
-    .list-card { background: var(--card-bg); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-radius: 16px; padding: 12px 16px; position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; transition: transform 0.4s var(--app-launch); width: 100%; cursor: pointer; margin-bottom: 0; will-change: transform; }
-    .list-card.swiped { transform: translate3d(-80px, 0, 0); } .list-card:active { transform: scale(0.95) translate3d(0,0,0); }
-    .list-info h3 { font-size: 15px; font-weight: 700; margin-bottom: 2px; text-transform: uppercase;} .list-info p { font-size: 11px; color: var(--text-sub); margin-bottom: 2px; font-weight: 600; text-transform: uppercase;}
-    .action-group { display: flex; gap: 8px; align-items: center; } .action-btn { width: 35px; height: 35px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease; background: rgba(0,122,255,0.15); color: var(--primary); } .action-btn.dl-btn { background: rgba(52,199,89,0.15); color: var(--success); } .action-btn:active { transform: scale(0.85); } .action-btn svg { width: 16px; height: 16px; fill: currentColor; pointer-events: none; }
-    .input-group { margin-bottom: 14px; width: 100%; } .input-group input, .input-group select { width: 100%; padding: 15px 16px; border-radius: 16px; border: 1px solid var(--glass-border); font-size: 15px; font-weight: 600; outline: none; background: var(--input-bg); color: var(--text-main); transition: border-color 0.2s, box-shadow 0.2s; text-transform: uppercase; text-align: center; } .input-group input:focus, .input-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,122,255,0.15);} .setting-label { font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; display: block; margin-left: 5px; text-transform: uppercase;}
-    .search-bar { display: flex; align-items: center; border-radius: 18px; padding: 12px 15px; margin-bottom: 15px; flex-shrink: 0; } .search-bar svg { fill: var(--text-sub); width: 18px; height: 18px; margin-right: 10px; } .search-bar input { border: none; background: transparent; outline: none; font-size: 14px; font-weight: 600; width: 100%; color: var(--text-main); text-align: left;}
-    .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform 0.2s var(--app-launch), box-shadow 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,122,255,0.3); text-transform: uppercase;} .btn.image-export { background: var(--success); box-shadow: 0 4px 15px rgba(52,199,89,0.3); margin-top: 15px; } .btn.setting-btn { background: var(--glass-bg); color: var(--text-main); border: 1px solid var(--glass-border); box-shadow: none; margin-bottom: 12px; justify-content: space-between; padding: 16px; } .btn.danger-btn { background: var(--danger); box-shadow: 0 4px 15px rgba(255,59,48,0.3); margin-top: 15px; color: white;} .btn:active { transform: scale(0.92) !important; } 
-    .btn-icon { background: var(--primary); border: none; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; transition: transform 0.2s var(--app-launch); box-shadow: 0 4px 10px rgba(0,122,255,0.3);} .btn-icon:active { transform: scale(0.85); } .btn-icon svg { fill: white; width: 18px; height: 18px; }
-    .att-btn { padding: 14px; border-radius: 16px; border: none; font-size: 14px; font-weight: 700; width: 100%; margin-bottom: 10px; cursor: pointer; color: white; transition: transform 0.2s var(--app-launch); text-transform: uppercase;} .att-btn.present { background: var(--success); box-shadow: 0 4px 12px rgba(52,199,89,0.3); } .att-btn.half { background: var(--warning); box-shadow: 0 4px 12px rgba(255,149,0,0.3); } .att-btn.absent { background: var(--danger); box-shadow: 0 4px 12px rgba(255,59,48,0.3); } .att-btn.excel-opt { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--glass-border); box-shadow: none; margin-bottom: 12px; } .att-btn:active { transform: scale(0.92) !important; }
-    .switch-wrap { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-radius: 18px; margin-bottom: 12px; } .switch-wrap span { font-size: 14px; font-weight: 700; color: var(--text-main); text-transform: uppercase;} .ios-switch { position: relative; display: inline-block; width: 50px; height: 28px; } .ios-switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 24px; width: 24px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); } input:checked + .slider { background-color: var(--success); } input:checked + .slider:before { transform: translateX(22px); }
-    .live-calc-box { background: linear-gradient(135deg, #007aff 0%, #0056b3 100%); color: white; padding: 18px; border-radius: 20px; margin-bottom: 12px; box-shadow: 0 8px 20px rgba(0,122,255, 0.3); display: flex; flex-direction: column; gap: 8px; font-weight: 600;} .calc-row { display: flex; justify-content: space-between; font-size: 14px; } .calc-row.total { font-size: 18px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; margin-top: 6px; font-weight: 800;} hr { border: 0; border-top: 1px solid var(--glass-border); margin: 15px 0; }
+    :root { 
+        --vh: 1vh; 
+        --primary: #2563EB; 
+        --success: #059669; 
+        --warning: #D97706; 
+        --danger:  #DC2626; 
+        
+        --bg-main: #F1F5F9; --card-bg: #FFFFFF; 
+        --text-main: #0F172A; --text-sub: #64748B; 
+        --nav-bg: rgba(255, 255, 255, 0.9); --glass-border: rgba(0, 0, 0, 0.06);
+        --box-bg: #F8FAFC; 
+        
+        --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --app-launch: cubic-bezier(0.25, 1, 0.5, 1);
+        
+        /* Modal Animation Coordinates */
+        --click-x: 50vw; 
+        --click-y: 50vh; 
+    }
     
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.45); z-index: 2000; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; } .modal-overlay.show { opacity: 1; visibility: visible; }
-    .modal-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform-origin: var(--click-x) var(--click-y); transform: scale3d(0.01, 0.01, 1); opacity: 0; transition: transform 0.4s var(--app-launch), opacity 0.3s ease; will-change: transform, opacity; pointer-events: none; } .modal-overlay.show .modal-wrapper { transform: scale3d(1, 1, 1); opacity: 1; pointer-events: auto; }
-    .modal-box { width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; border-radius: 24px; padding: 24px; position: relative; transform: translateZ(0); -webkit-transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; contain: layout paint; } .modal-box::-webkit-scrollbar { display: none; } .modal-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 20px; text-transform: uppercase;}
-    .close-modal-btn { position: absolute; top: 18px; right: 18px; background: var(--input-bg); border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-main); transition: transform 0.2s; z-index: 50;} .close-modal-btn:active { transform: scale(0.85); } .close-modal-btn svg { width: 14px; height: 14px; fill: currentColor; }
-    .fs-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1500; display: flex; flex-direction: column; overflow: hidden; transform-origin: var(--click-x) var(--click-y); transform: scale3d(0.01, 0.01, 1); opacity: 0; visibility: hidden; transition: transform 0.4s var(--app-launch), opacity 0.3s ease, visibility 0.3s ease; will-change: transform, opacity; pointer-events: none; } .fs-modal.show { transform: scale3d(1, 1, 1); opacity: 1; visibility: visible; pointer-events: auto; }
-    .fs-header { display: flex; justify-content: space-between; align-items: center; padding: max(env(safe-area-inset-top), 20px) 20px 20px; border-bottom: 1px solid var(--glass-border); } .fs-header h2 { font-size: 18px; font-weight: 700; color: var(--text-main); text-transform: uppercase;} .fs-content { flex: 1; overflow-y: auto; padding: 20px 20px 40px; } .fs-card { padding: 16px; border-radius: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s var(--app-launch); cursor: pointer;} .fs-card:active { transform: scale(0.92) !important; } .fs-card h3 { font-size: 15px; font-weight: 700;}
-    #toast { position: absolute; top: -60px; left: 50%; transform: translateX(-50%) translate3d(0,0,0); padding: 12px 24px; border-radius: 30px; font-size: 13px; font-weight: 700; z-index: 9999; transition: top 0.4s var(--app-launch); display: flex; align-items: center; gap: 8px; color: #fff; text-transform: uppercase; } #toast.show { top: max(env(safe-area-inset-top), 40px); }
-    .analytics-section { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px 0; min-height: 180px; } .circle-chart { width: 170px; height: 170px; position: relative; } .circular-chart { display: block; max-width: 100%; max-height: 100%; } .circle-bg { fill: none; stroke-width: 2.5; opacity: 0.15; stroke-linecap: round;} .circle { fill: none; stroke-width: 2.5; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
-    #export-container { position: absolute; top: -9999px; left: -9999px; width: 1000px; z-index: -999; display: block; }
-    .export-invoice-box { padding: 50px; width: 700px; color: #1c1c1e; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; border-radius: 24px; border: 1px solid #eaeaea; box-shadow: 0 10px 30px rgba(0,0,0,0.05); } .inv-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #007aff; padding-bottom: 20px; margin-bottom: 30px; } .inv-header-left h1 { font-size: 38px; color: #007aff; margin: 0; font-weight: 900; letter-spacing: -1px;} .inv-header-left p { font-size: 14px; color: #666; margin: 6px 0 0; font-weight: bold; letter-spacing: 2px;} .inv-header-right { text-align: right; } .inv-header-right h2 { font-size: 24px; color: #1c1c1e; margin: 0; font-weight: 800; text-transform: uppercase;} .inv-header-right p { font-size: 15px; color: #888; margin: 6px 0 0; font-weight: 600;} .inv-details { display: flex; justify-content: space-between; margin-bottom: 30px; background: #f8f9fa; padding: 20px; border-radius: 16px;} .inv-details p { margin: 6px 0 0; font-size: 18px; color: #1c1c1e; } .inv-details .label { font-size: 13px; color: #888; font-weight: bold; text-transform: uppercase; margin:0;} .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; } .inv-table th { text-align: left; padding: 12px 8px; color: #888; font-size: 14px; border-bottom: 2px solid #eee; text-transform: uppercase; } .inv-table th.center { text-align: center; } .inv-table th.right { text-align: right; } .inv-table td { padding: 20px 8px; font-size: 18px; font-weight: 700; border-bottom: 1px solid #eee; } .inv-table td.center { text-align: center; } .inv-table td.right { text-align: right; } .inv-row { display: flex; justify-content: space-between; padding: 12px 8px; font-size: 18px; font-weight: 600; color: #666;} .inv-row strong { color: #1c1c1e; font-size: 20px;} .inv-total-row { display: flex; justify-content: space-between; padding: 25px 8px 10px; margin-top: 15px; border-top: 2px dashed #ccc; font-size: 28px; font-weight: 900; color: #ff3b30; } .inv-footer { text-align: center; margin-top: 50px; color: #888; font-size: 16px; font-weight: bold; letter-spacing: 1px;} .export-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; text-align: center; border: 2px solid #ddd; background: #fff;} .export-table th, .export-table td { border: 2px solid #ddd; padding: 12px 6px; color:#000; } .export-title { font-size: 28px; margin-bottom: 20px; font-weight: bold; text-align: center; color: #000; background: #fff;}
+    html.dark-mode { 
+        --bg-main: #020617; --card-bg: #0F172A; 
+        --text-main: #F8FAFC; --text-sub: #94A3B8; 
+        --nav-bg: rgba(15, 23, 42, 0.9); --glass-border: rgba(255, 255, 255, 0.08);
+        --box-bg: #1E293B; 
+        color-scheme: dark; 
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-font-smoothing: antialiased; text-transform: uppercase; }
+    input, select, textarea { user-select: auto; }
+    
+    body { height: 100vh; height: calc(var(--vh, 1vh) * 100); width: 100%; overflow: hidden; background-color: var(--bg-main); color: var(--text-main); transition: background-color 0.4s ease; }
+    
+    #app { width: 100%; max-width: 500px; height: 100%; position: absolute; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; overflow: hidden; }
+    
+    /* =========================================
+       2. CLEAN LAYOUT & BOTTOM LOCKED NAV
+       ========================================= */
+    .section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: max(env(safe-area-inset-top), 20px) 20px calc(env(safe-area-inset-bottom) + 85px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.4s var(--app-launch), visibility 0.4s; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; will-change: opacity, transform, visibility; }
+    .section.active { opacity: 1; visibility: visible; transform: translate3d(0,0,0); z-index: 10; }
+    .section.slide-left { transform: translate3d(-40px, 0, 0); } .section.slide-right { transform: translate3d(40px, 0, 0); } .section::-webkit-scrollbar { display: none; }
+    
+    .content-wrapper { display: flex; flex-direction: column; justify-content: flex-start; flex: 1; padding-top: 5px; padding-bottom: 20px;}
+
+    .app-nav { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; align-items: center; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); z-index: 1000; box-shadow: 0 -5px 25px rgba(0,0,0,0.03); }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-sub); cursor: pointer; transition: color 0.2s; flex: 1;}
+    .nav-item.active { color: var(--primary); }
+    .nav-item span { font-size: 10px; font-weight: 800; letter-spacing: 0.5px;}
+    .nav-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.4s var(--spring); }
+    .nav-item.active svg { transform: scale3d(1.15, 1.15, 1) translateY(-3px); }
+
+    /* =========================================
+       3. PILL HEADERS & ADMIN ADD BUTTONS
+       ========================================= */
+    @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .pill-header { background: var(--card-bg); border-radius: 20px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex-shrink: 0;}
+    .pill-header .brand-text { font-size: 17px; font-weight: 900; color: var(--primary); letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+    .pill-header.sec-title .brand-text { color: var(--text-main); }
+    
+    .add-btn { background: var(--primary); color: white; border: none; border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s var(--spring); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    .add-btn:active { transform: scale(0.85); }
+    .add-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+
+    /* =========================================
+       4. DASHBOARD CARDS (Mobile Viewer Style)
+       ========================================= */
+    .dash-list { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+    .stat-card { border-radius: 20px; padding: 22px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: none; opacity: 0; animation: fadeInUp 0.6s var(--spring) forwards; }
+    .c-rev { background: linear-gradient(135deg, #34D399 0%, #059669 100%); color: white; animation-delay: 0.05s; }
+    .c-pend { background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%); color: white; animation-delay: 0.15s; }
+    .c-exp { background: linear-gradient(135deg, #F87171 0%, #DC2626 100%); color: white; animation-delay: 0.25s; }
+    .c-cust { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); animation-delay: 0.35s; }
+    
+    .stat-info { display: flex; flex-direction: column; align-items: flex-start; }
+    .stat-info h4 { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px; opacity: 0.9;}
+    .c-cust .stat-info h4 { color: var(--text-sub); }
+    .stat-info h2 { font-size: 28px; font-weight: 900; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; line-height: 1;}
+
+    .stat-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;}
+    .c-rev .stat-icon, .c-pend .stat-icon, .c-exp .stat-icon { background: rgba(255,255,255,0.25); }
+    .c-cust .stat-icon { background: rgba(37, 99, 235, 0.12); color: var(--primary); }
+    .stat-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;}
+    .c-rev .stat-icon svg, .c-pend .stat-icon svg, .c-exp .stat-icon svg { stroke: #ffffff; }
+
+    /* =========================================
+       5. ADMIN LIST CARDS & SWIPE DELETE
+       ========================================= */
+    .empty-state { text-align: center; color: var(--text-sub); font-size: 14px; font-weight: 700; margin: auto 0; padding: 40px; border-radius: 20px; border: 2px dashed var(--glass-border); opacity: 0; animation: fadeInUp 0.5s var(--spring) forwards;}
+    
+    .swipe-container { position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 12px; background: transparent; opacity: 0; animation: fadeInUp 0.5s var(--spring) forwards;}
+    .delete-bg { position: absolute; top: 0; right: 0; height: 100%; width: 90px; background: var(--danger); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; z-index: 1;} 
+    .delete-bg svg { width: 26px; height: 26px; fill: none; stroke: white; stroke-width: 2.5; }
+    
+    /* Sleek Admin Card Style */
+    .admin-card { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); cursor: pointer; position: relative; z-index: 2; overflow: hidden; transition: transform 0.35s var(--spring); }
+    .admin-card:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(0,0,0,0.01); }
+    .admin-card.swiped { transform: translateX(-90px); }
+
+    .card-left { display: flex; flex-direction: column; gap: 4px; }
+    .card-left h3 { font-size: 15px; font-weight: 900; color: var(--text-main); margin:0; letter-spacing: 0.5px;}
+    .card-left p { font-size: 11px; font-weight: 800; color: var(--text-sub); display: flex; align-items: center; gap: 4px; margin:0;}
+    .card-left p svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2.5;}
+    
+    .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .card-badge { padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 900; letter-spacing: 0.5px; display: inline-block;}
+    .badge-red { background: rgba(220, 38, 38, 0.1); color: var(--danger); }
+    .badge-green { background: rgba(5, 150, 105, 0.1); color: var(--success); }
+    .badge-orange { background: rgba(217, 119, 6, 0.1); color: var(--warning); }
+    .badge-gray { background: rgba(100, 116, 139, 0.1); color: var(--text-sub); }
+    .card-date { font-size: 10px; color: var(--text-sub); font-weight: 800; letter-spacing: 0.5px;}
+
+    /* =========================================
+       6. SETTINGS & EXPORTS
+       ========================================= */
+    .setting-card { background: var(--card-bg); border-radius: 16px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
+    .setting-card span { font-size: 14px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px;}
+    
+    .big-print-btn { width: 100%; padding: 18px 20px; border-radius: 16px; background: var(--card-bg); border: 1px solid var(--glass-border); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; transition: transform 0.2s var(--spring); cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.02); letter-spacing: 0.5px;}
+    .big-print-btn:active { transform: scale3d(0.96, 0.96, 1); }
+    .big-print-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;}
+    
+    .big-print-btn.btn-cust { color: var(--primary); background: rgba(37, 99, 235, 0.05); border-color: rgba(37, 99, 235, 0.1);}
+    .big-print-btn.btn-staff { color: var(--warning); background: rgba(217, 119, 6, 0.05); border-color: rgba(217, 119, 6, 0.1);}
+    .big-print-btn.btn-exp { color: var(--danger); background: rgba(220, 38, 38, 0.05); border-color: rgba(220, 38, 38, 0.1);}
+    .big-print-btn.btn-cloud { color: #059669; background: rgba(5, 150, 105, 0.05); border-color: rgba(5, 150, 105, 0.1);}
+    .big-print-btn.btn-clear { color: white; background: var(--danger); border-color: transparent; box-shadow: 0 4px 15px rgba(220,38,38,0.3);}
+    
+    .ios-switch { position: relative; display: inline-block; width: 46px; height: 28px; } .ios-switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--glass-border); transition: .3s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 24px; width: 24px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); } input:checked + .slider { background-color: var(--success); } input:checked + .slider:before { transform: translate3d(18px,0,0); } html.dark-mode .slider { background-color: #334155; }
+
+    #toast { position: absolute; top: -80px; left: 50%; transform: translate3d(-50%, 0, 0); background: var(--text-main); color: var(--bg-main); padding: 12px 24px; border-radius: 30px; font-size: 12px; font-weight: 800; z-index: 9999; transition: transform 0.4s var(--spring); display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); letter-spacing: 0.5px;}
+    #toast.show { transform: translate3d(-50%, calc(max(env(safe-area-inset-top), 40px)), 0); }
+
+    /* =========================================
+       7. XY ANIMATION & MODALS
+       ========================================= */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 2000; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; } 
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    
+    .modal-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform-origin: var(--click-x) var(--click-y); transform: scale3d(0.01, 0.01, 1); opacity: 0; transition: transform 0.4s var(--app-launch), opacity 0.3s ease; pointer-events: none; } 
+    .modal-overlay.show .modal-wrapper { transform: scale3d(1, 1, 1); opacity: 1; pointer-events: auto; }
+    
+    .modal-box { width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border-radius: 24px; padding: 24px; position: relative; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.1); } 
+    .modal-box::-webkit-scrollbar { display: none; } 
+    .modal-title { font-size: 16px; font-weight: 900; text-align: center; margin-bottom: 20px; color: var(--text-main); letter-spacing: 0.5px;}
+    
+    .close-modal-btn { position: absolute; top: 18px; right: 18px; background: var(--box-bg); border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-sub); transition: transform 0.2s;} 
+    .close-modal-btn:active { transform: scale(0.85); } .close-modal-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+    
+    .input-group { margin-bottom: 14px; width: 100%; } 
+    .input-group input, .input-group select { width: 100%; padding: 15px 16px; border-radius: 12px; border: 1px solid transparent; font-size: 14px; font-weight: 700; outline: none; background: var(--box-bg); color: var(--text-main); transition: 0.2s; text-align: center; font-family: inherit;} 
+    .input-group input:focus, .input-group select:focus { border-color: var(--primary); background: transparent;} 
+    .input-group input::placeholder { color: var(--text-sub); font-weight: 700; }
+    .setting-label { font-size: 11px; font-weight: 800; color: var(--text-sub); margin-bottom: 6px; display: block; margin-left: 5px; letter-spacing: 0.5px;}
+    
+    .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; transition: transform 0.2s var(--spring); width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(37,99,235,0.3); letter-spacing: 0.5px;} 
+    .btn:active { transform: scale(0.95); }
+    .btn.danger-btn { background: var(--danger); box-shadow: 0 4px 15px rgba(220,38,38,0.3); } 
+    .btn.outline-btn { background: transparent; color: var(--text-main); border: 2px solid var(--box-bg); box-shadow: none; }
+    
+    .att-btn { padding: 14px; border-radius: 12px; border: none; font-size: 13px; font-weight: 800; width: 100%; margin-bottom: 10px; cursor: pointer; color: white; transition: transform 0.2s var(--spring); letter-spacing: 0.5px;} 
+    .att-btn.present { background: var(--success); box-shadow: 0 4px 12px rgba(5,150,105,0.3); } 
+    .att-btn.half { background: var(--warning); box-shadow: 0 4px 12px rgba(217,119,6,0.3); } 
+    .att-btn.absent { background: var(--danger); box-shadow: 0 4px 12px rgba(220,38,38,0.3); } 
+    .att-btn:active { transform: scale(0.95); }
+
+    .live-calc-box { background: var(--box-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; } 
+    .calc-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--text-sub);} 
+    .calc-row span:last-child { color: var(--text-main); font-variant-numeric: tabular-nums; }
+    .calc-row.total { font-size: 15px; border-top: 1px dashed var(--glass-border); padding-top: 10px; margin-top: 4px; color: var(--primary);} 
+    .calc-row.total span:last-child { color: var(--primary); }
+    hr { border: 0; border-top: 1px solid var(--glass-border); margin: 15px 0; }
+    
+    .admin-detail-box { text-align: center; font-size: 12px; font-weight: 800; color: var(--text-sub); margin-bottom: 15px; background: rgba(37,99,235,0.05); padding: 10px; border-radius: 10px; color: var(--primary);}
+
+    /* =========================================
+       8. IMAGE EXPORT HIDDEN CONTAINER
+       ========================================= */
+    #export-container { position: absolute; top: -9999px; left: -9999px; width: 1200px; background: #ffffff; z-index: -999; display: block; }
 </style>
 </head>
 <body>
+
 <div class="bg-mesh"></div>
+
 <div id="app">
-    <div id="toast" class="glass-panel" style="background: rgba(30,30,30,0.9); border-color: rgba(255,255,255,0.1);">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+
+    <div id="toast">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         <span id="toast-msg">SUCCESS</span>
     </div>
 
-    <!-- HOME TAB -->
+    <!-- TAB 1: DASHBOARD -->
     <div id="sec1" class="section active">
-        <div class="pill-header glass-panel">DASHBOARD ADMIN <button class="btn-icon" onclick="openModal(event, 'addCustomerModal')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button></div>
-        <div class="dash-grid">
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'customers')"><div class="icon" style="background:rgba(0,122,255,0.15); color:var(--primary);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div><h4>CUSTOMERS</h4><h2 id="dash-cust">0</h2></div>
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'revenue')"><div class="icon" style="background:rgba(52,199,89,0.15); color:var(--success);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><h4>TOTAL REVENUE</h4><h2 id="dash-rev">₹0</h2></div>
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'pending')"><div class="icon" style="background:rgba(255,149,0,0.15); color:var(--warning);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div><h4>PENDING AMOUNT</h4><h2 id="dash-pend">₹0</h2></div>
-            <div class="dash-card glass-panel" onclick="openFSModal(event, 'expenses')"><div class="icon" style="background:rgba(255,59,48,0.15); color:var(--danger);"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM11 7h2v4h4v2h-6V7z"/></svg></div><h4>EXPENSES</h4><h2 id="dash-exp">₹0</h2></div>
+        <div class="pill-header">
+            <span class="brand-text">ADMIN PRO</span>
+            <button class="add-btn" style="background:var(--box-bg); color:var(--text-main); box-shadow:none;" onclick="switchTab(5, document.querySelectorAll('.nav-item')[4])"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"></path></svg></button>
         </div>
-        <div class="analytics-section"><div class="circle-chart"><svg viewBox="0 0 42 42" class="circular-chart"><path class="circle-bg" stroke="var(--primary)" d="M21 2 a 19 19 0 1 1 0 38 a 19 19 0 1 1 0 -38"/><path class="circle" id="ring-cust" stroke="var(--primary)" stroke-dasharray="0, 120" d="M21 2 a 19 19 0 1 1 0 38 a 19 19 0 1 1 0 -38"/><path class="circle-bg" stroke="var(--success)" d="M21 6 a 15 15 0 1 1 0 30 a 15 15 0 1 1 0 -30"/><path class="circle" id="ring-rev" stroke="var(--success)" stroke-dasharray="0, 95" d="M21 6 a 15 15 0 1 1 0 30 a 15 15 0 1 1 0 -30"/><path class="circle-bg" stroke="var(--warning)" d="M21 10 a 11 11 0 1 1 0 22 a 11 11 0 1 1 0 -22"/><path class="circle" id="ring-pend" stroke="var(--warning)" stroke-dasharray="0, 70" d="M21 10 a 11 11 0 1 1 0 22 a 11 11 0 1 1 0 -22"/><path class="circle-bg" stroke="var(--danger)" d="M21 14 a 7 7 0 1 1 0 14 a 7 7 0 1 1 0 -14"/><path class="circle" id="ring-exp" stroke="var(--danger)" stroke-dasharray="0, 44" d="M21 14 a 7 7 0 1 1 0 14 a 7 7 0 1 1 0 -14"/></svg></div></div>
-    </div>
-
-    <!-- CLIENTS TAB -->
-    <div id="sec2" class="section">
-        <div class="search-bar glass-panel"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input type="text" id="search-cust" placeholder="SEARCH CUSTOMER..." oninput="renderCustomers()"></div>
-        <div id="customer-list"></div>
-    </div>
-
-    <!-- STAFF TAB -->
-    <div id="sec3" class="section">
-        <div class="pill-header glass-panel">WORKERS INFO <button class="btn-icon" onclick="openModal(event, 'addWorkerModal')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button></div>
-        <div id="worker-list"></div>
-    </div>
-
-    <!-- EXPENSE TAB -->
-    <div id="sec4" class="section">
-        <div class="pill-header glass-panel">EXPENSES <button class="btn-icon" onclick="openModal(event, 'addExpenseModal')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button></div>
-        <div id="expense-list"></div>
-    </div>
-
-    <!-- SETTINGS TAB -->
-    <div id="sec5" class="section">
-        <div class="pill-header glass-panel">SETTINGS <div style="width:32px;"></div></div>
-        <div class="switch-wrap glass-panel"><span>DARK MODE</span><label class="ios-switch"><input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()"><span class="slider"></span></label></div>
-        <button class="btn setting-btn glass-panel" onclick="openModal(event, 'timingModal')"><span>SET DEFAULT TIMINGS</span><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></button>
-        <button class="btn image-export" onclick="openModal(event, 'printDataModal')"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> DOWNLOAD IMAGE DATA</button>
-        <button class="btn danger-btn" onclick="clearAllData(event)" style="margin-top:20px;"><svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> CLEAR ALL DATA</button>
-    </div>
-
-    <!-- MODALS -->
-    <div class="modal-overlay" id="customConfirmOverlay" style="z-index: 3000;">
-        <div class="modal-wrapper" onclick="closeConfirm()">
-            <div class="modal-box glass-panel" style="max-width: 320px; padding: 24px;" onclick="event.stopPropagation()">
-                <div class="modal-title" style="color: var(--danger); margin-bottom: 15px;">WARNING</div><p id="confirmMessage" style="text-align: center; font-size: 15px; margin-bottom: 25px; font-weight: 700;"></p>
-                <div style="display: flex; gap: 12px;"><button class="btn setting-btn" style="flex: 1; margin: 0; padding: 12px; font-size: 13px;" onclick="closeConfirm()">CANCEL</button><button class="btn danger-btn" style="flex: 1; margin: 0; padding: 12px; font-size: 13px; box-shadow: none;" id="confirmBtn">CONFIRM</button></div>
+        <div class="content-wrapper">
+            <div class="dash-list">
+                <!-- Mobile Viewer Style Stacked Dashboard Cards -->
+                <div class="stat-card c-rev">
+                    <div class="stat-info"><h4>Total Revenue</h4><h2 id="dash-rev">₹0</h2></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M7 4h10"></path><path d="M7 9h10"></path><path d="M9 4h3c3.5 0 4 5 0 5"></path><path d="M9 14l5.5 7"></path></svg></div>
+                </div>
+                <div class="stat-card c-pend">
+                    <div class="stat-info"><h4>Pending Dues</h4><h2 id="dash-pend">₹0</h2></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                </div>
+                <div class="stat-card c-exp">
+                    <div class="stat-info"><h4>Total Expenses</h4><h2 id="dash-exp">₹0</h2></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                </div>
+                <div class="stat-card c-cust">
+                    <div class="stat-info"><h4>Total Clients</h4><h2 id="dash-cust">0</h2></div>
+                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="addCustomerModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">NEW CUSTOMER DATA</div><div class="input-group"><input type="text" id="c-name" placeholder="CUSTOMER NAME"></div><div class="input-group"><input type="number" id="c-mobile" placeholder="MOBILE NUMBER"></div><div class="input-group"><input type="text" id="c-item" placeholder="ITEM NAME"></div><div style="display:flex; gap:12px;"><div class="input-group" style="flex:1"><input type="number" id="c-qty" placeholder="QUANTITY" oninput="calcCust()"></div><div class="input-group" style="flex:1"><input type="number" id="c-rate" placeholder="RATE (₹)" oninput="calcCust()"></div></div><div class="input-group"><input type="number" id="c-adv" placeholder="ADVANCE RECEIVED (₹)" oninput="calcCust()"></div><div class="live-calc-box"><div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="c-total-txt">₹0</span></div><div class="calc-row"><span>RECEIVED:</span> <span id="c-recv-txt">₹0</span></div><div class="calc-row total"><span>PENDING DUE:</span> <span id="c-pend-txt">₹0</span></div></div><button class="btn" onclick="saveCustomer()">SAVE CUSTOMER</button></div></div></div>
-    <div class="modal-overlay" id="updateCustModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title" id="up-cust-name">NAME</div><input type="hidden" id="up-cust-id"><div class="live-calc-box" style="margin-bottom: 20px;"><div class="calc-row"><span>CURRENT PENDING:</span> <span id="up-pend-txt" style="color:#ffb3b3;">₹0</span></div><div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="up-total-txt">₹0</span></div><div class="calc-row"><span>TOTAL RECEIVED:</span> <span id="up-recv-txt">₹0</span></div></div><div style="text-align:center; font-size:12px; color:var(--text-sub); margin-bottom:15px; font-weight:700;"><div id="up-item-details">ITEM: NONE | QTY: 0 | RATE: ₹0</div><div id="up-date-details">DATE: N/A</div></div><div class="input-group"><input type="number" id="up-amount-paid" placeholder="ENTER NEW AMOUNT PAID (₹)"></div><button class="btn" onclick="processPayment()">UPDATE PAYMENT</button></div></div></div>
-    <div class="modal-overlay" id="addWorkerModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">ADD NEW WORKER</div><div class="input-group"><input type="text" id="w-name" placeholder="WORKER NAME"></div><button class="btn" onclick="saveWorker()">SAVE WORKER</button></div></div></div>
-    <div class="modal-overlay" id="attendanceModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title" id="att-worker-name">MARK ATTENDANCE</div><input type="hidden" id="att-worker-id"><div style="display:flex; gap:12px; margin-bottom: 8px;"><div style="flex:1;"><label class="setting-label">TIME IN</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timein"></div></div><div style="flex:1;"><label class="setting-label">TIME OUT</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timeout"></div></div></div><label class="setting-label" style="margin-top:10px;">GIVE ADVANCE</label><div class="input-group"><input type="number" id="att-advance" placeholder="ADVANCE AMOUNT (₹)"></div><button class="btn" style="margin-bottom:15px;" onclick="saveAdvanceOnly()">SAVE TIME & ADVANCE ONLY</button><hr><button class="att-btn present" onclick="markAttendance('PRESENT')">MARK PRESENT</button><button class="att-btn half" onclick="markAttendance('HALF DAY')">MARK HALF DAY</button><button class="att-btn absent" onclick="markAttendance('ABSENT')">MARK ABSENT</button></div></div></div>
-    <div class="modal-overlay" id="addExpenseModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">ADD EXPENSE</div><div class="input-group"><select id="e-type"><option value="LABOUR COST">LABOUR COST</option><option value="RAW MATERIAL">RAW MATERIAL</option><option value="ELECTRICITY">ELECTRICITY</option><option value="TRANSPORT">TRANSPORT</option><option value="OTHER">OTHER</option></select></div><div class="input-group"><input type="number" id="e-amount" placeholder="AMOUNT (₹)"></div><div class="input-group"><input type="date" id="e-date"></div><button class="btn" onclick="saveExpense()">DONE</button></div></div></div>
-    <div class="modal-overlay" id="timingModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">SET DEFAULT TIMINGS</div><label class="setting-label">DEFAULT TIME IN</label><div class="input-group"><input type="time" id="s-timein"></div><label class="setting-label">DEFAULT TIME OUT</label><div class="input-group"><input type="time" id="s-timeout"></div><label class="setting-label">HALF DAY TIME</label><div class="input-group"><input type="time" id="s-halfday"></div><button class="btn" onclick="saveSettings()">SAVE TIMINGS</button></div></div></div>
-    <div class="modal-overlay" id="printDataModal"><div class="modal-wrapper" onclick="closeModals(event)"><div class="modal-box glass-panel" onclick="event.stopPropagation()"><button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button><div class="modal-title">DOWNLOAD IMAGE DATA</div><button class="att-btn excel-opt" onclick="exportDataImage(event, 'customers')">DOWNLOAD CUSTOMERS DATA</button><button class="att-btn excel-opt" onclick="exportDataImage(event, 'expenses')">DOWNLOAD EXPENSES DATA</button><button class="att-btn excel-opt" onclick="exportDataImage(event, 'workers')">DOWNLOAD WORKERS DATA</button></div></div></div>
+    <!-- TAB 2: CLIENTS -->
+    <div id="sec2" class="section">
+        <div class="pill-header sec-title">
+            <span class="brand-text">CLIENTS</span>
+            <button class="add-btn" onclick="openModal(event, 'addCustomerModal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        </div>
+        <div class="content-wrapper"><div id="customer-list"></div></div>
+    </div>
 
-    <div class="fs-modal glass-panel" id="fsModal" style="border-radius:0; border:none;"><div class="fs-header glass-panel" style="border-radius:0; border-top:none; border-left:none; border-right:none;"><h2 id="fs-title">DATA</h2><button class="close-modal-btn" style="position:static;" onclick="closeFSModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div><div class="fs-content" id="fs-content"></div></div>
+    <!-- TAB 3: STAFF -->
+    <div id="sec3" class="section">
+        <div class="pill-header sec-title">
+            <span class="brand-text">STAFF</span>
+            <button class="add-btn" onclick="openModal(event, 'addWorkerModal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        </div>
+        <div class="content-wrapper"><div id="worker-list"></div></div>
+    </div>
 
-    <nav class="bottom-nav glass-panel">
-        <div class="nav-item active" onclick="switchTab(1, this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>HOME</span></div>
-        <div class="nav-item" onclick="switchTab(2, this)"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span>CLIENTS</span></div>
-        <div class="nav-item" onclick="switchTab(3, this)"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg><span>STAFF</span></div>
-        <div class="nav-item" onclick="switchTab(4, this)"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span>EXPENSE</span></div>
-        <div class="nav-item" onclick="switchTab(5, this)"><svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg><span>SETTINGS</span></div>
+    <!-- TAB 4: EXPENSES -->
+    <div id="sec4" class="section">
+        <div class="pill-header sec-title">
+            <span class="brand-text">EXPENSES</span>
+            <button class="add-btn" onclick="openModal(event, 'addExpenseModal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        </div>
+        <div class="content-wrapper"><div id="expense-list"></div></div>
+    </div>
+
+    <!-- TAB 5: PREFERENCES (Settings, Backup, Export) -->
+    <div id="sec5" class="section">
+        <div class="pill-header sec-title">
+            <span class="brand-text">PREFERENCES</span>
+        </div>
+        <div class="content-wrapper">
+            <div class="setting-card">
+                <span>Dark Mode</span>
+                <label class="ios-switch">
+                    <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button class="big-print-btn" onclick="openModal(event, 'timingModal')">
+                Set Default Timings
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </button>
+
+            <hr>
+
+            <button class="big-print-btn btn-cloud" onclick="manualCloudBackup(event)">
+                Backup Data To Cloud
+                <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M12 11v6"></path><path d="M9 14l3-3 3 3"></path></svg>
+            </button>
+            <button class="big-print-btn btn-cloud" style="color:#D97706; background:rgba(217, 119, 6, 0.05); border-color:rgba(217, 119, 6, 0.1);" onclick="manualCloudRestore(event)">
+                Restore Data From Cloud
+                <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M12 11v6"></path><path d="M9 14l3 3 3-3"></path></svg>
+            </button>
+
+            <hr>
+
+            <button class="big-print-btn btn-cust" onclick="exportDataImage('customers')">
+                Download Clients Data
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </button>
+            <button class="big-print-btn btn-staff" onclick="exportDataImage('workers')">
+                Download Staff Data
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </button>
+            <button class="big-print-btn btn-exp" onclick="exportDataImage('expenses')">
+                Download Expenses Data
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </button>
+
+            <hr>
+            <button class="big-print-btn btn-clear" onclick="clearAllData(event)">
+                CLEAR ALL DATA
+                <svg viewBox="0 0 24 24" stroke="white"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- LOCKED BOTTOM NAV -->
+    <nav class="app-nav">
+        <div class="nav-item active" onclick="switchTab(1, this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span>Home</span></div>
+        <div class="nav-item" onclick="switchTab(2, this)"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Clients</span></div>
+        <div class="nav-item" onclick="switchTab(3, this)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Staff</span></div>
+        <div class="nav-item" onclick="switchTab(4, this)"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg><span>Expense</span></div>
+        <div class="nav-item" onclick="switchTab(5, this)"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg><span>Setup</span></div>
     </nav>
 </div>
+
+<!-- =========================================
+     ADMIN MODALS (With XY Animation Wrappers)
+     ========================================= -->
+<div class="modal-overlay" id="customConfirmOverlay" onclick="closeConfirm()">
+    <div class="modal-wrapper">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-title" style="color: var(--danger);">WARNING</div>
+            <p id="confirmMessage" style="text-align: center; font-size: 14px; margin-bottom: 25px; font-weight: 800; color: var(--text-main);"></p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn outline-btn" style="flex: 1;" onclick="closeConfirm()">CANCEL</button>
+                <button class="btn danger-btn" style="flex: 1;" id="confirmBtn">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="addCustomerModal" onclick="closeModals(event)">
+    <div class="modal-wrapper">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="modal-title">NEW CLIENT</div>
+            <div class="input-group"><input type="text" id="c-name" placeholder="CLIENT NAME"></div>
+            <div class="input-group"><input type="number" id="c-mobile" placeholder="MOBILE NUMBER"></div>
+            <div class="input-group"><input type="text" id="c-item" placeholder="ITEM NAME"></div>
+            <div style="display:flex; gap:12px;">
+                <div class="input-group" style="flex:1"><input type="number" id="c-qty" placeholder="QUANTITY" oninput="calcCust()"></div>
+                <div class="input-group" style="flex:1"><input type="number" id="c-rate" placeholder="RATE (₹)" oninput="calcCust()"></div>
+            </div>
+            <div class="input-group"><input type="number" id="c-adv" placeholder="ADVANCE RECEIVED (₹)" oninput="calcCust()"></div>
+            <div class="live-calc-box">
+                <div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="c-total-txt">₹0</span></div>
+                <div class="calc-row"><span>RECEIVED:</span> <span id="c-recv-txt">₹0</span></div>
+                <div class="calc-row total"><span>PENDING DUE:</span> <span id="c-pend-txt">₹0</span></div>
+            </div>
+            <button class="btn" onclick="saveCustomer()">SAVE CLIENT</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="updateCustModal" onclick="closeModals(event)">
+    <div class="modal-wrapper">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="modal-title" id="up-cust-name">NAME</div>
+            <input type="hidden" id="up-cust-id">
+            
+            <div class="admin-detail-box" id="up-item-details">ITEM: NONE | QTY: 0 | RATE: ₹0</div>
+
+            <div class="live-calc-box" style="margin-bottom: 20px;">
+                <div class="calc-row"><span>CURRENT PENDING:</span> <span id="up-pend-txt" style="color:var(--danger);">₹0</span></div>
+                <div class="calc-row"><span>TOTAL AMOUNT:</span> <span id="up-total-txt">₹0</span></div>
+                <div class="calc-row"><span>TOTAL RECEIVED:</span> <span id="up-recv-txt">₹0</span></div>
+            </div>
+            
+            <div class="input-group"><input type="number" id="up-amount-paid" placeholder="ENTER NEW AMOUNT PAID (₹)"></div>
+            <button class="btn" onclick="processPayment()">UPDATE PAYMENT</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="addWorkerModal" onclick="closeModals(event)">
+    <div class="modal-wrapper">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="modal-title">ADD NEW STAFF</div>
+            <div class="input-group"><input type="text" id="w-name" placeholder="STAFF NAME"></div>
+            <button class="btn" onclick="saveWorker()">SAVE STAFF</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="attendanceModal" onclick="closeModals(event)">
+    <div class="modal-wrapper">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="modal-title" id="att-worker-name">MARK ATTENDANCE</div>
+            <input type="hidden" id="att-worker-id">
+            <div style="display:flex; gap:12px; margin-bottom: 8px;">
+                <div style="flex:1;"><label class="setting-label">TIME IN</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timein"></div></div>
+                <div style="flex:1;"><label class="setting-label">TIME OUT</label><div class="input-group" style="margin-bottom:0;"><input type="time" id="att-timeout"></div></div>
+            </div>
+            <label class="setting-label" style="margin-top:10px;">GIVE ADVANCE</label>
+            <div class="input-group"><input type="number" id="att-advance" placeholder="ADVANCE AMOUNT (₹)"></div>
+            <button class="btn" style="margin-bottom:15px; background:var(--text-main); color:var(--bg-main);" onclick="saveAdvanceOnly()">SAVE TIME & ADVANCE ONLY</button>
+            <hr>
+            <button class="att-btn present" onclick="markAttendance('PRESENT')">MARK PRESENT</button>
+            <button class="att-btn half" onclick="markAttendance('HALF DAY')">MARK HALF DAY</button>
+            <button class="att-btn absent" onclick="markAttendance('ABSENT')">MARK ABSENT</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="addExpenseModal" onclick="closeModals(event)">
+    <div class="modal-wrapper">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="modal-title">ADD EXPENSE</div>
+            <div class="input-group">
+                <select id="e-type">
+                    <option value="LABOUR COST">LABOUR COST</option>
+                    <option value="RAW MATERIAL">RAW MATERIAL</option>
+                    <option value="ELECTRICITY">ELECTRICITY</option>
+                    <option value="TRANSPORT">TRANSPORT</option>
+                    <option value="OTHER">OTHER</option>
+                </select>
+            </div>
+            <div class="input-group"><input type="number" id="e-amount" placeholder="AMOUNT (₹)"></div>
+            <div class="input-group"><input type="date" id="e-date"></div>
+            <button class="btn" onclick="saveExpense()">SAVE EXPENSE</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="timingModal" onclick="closeModals(event)">
+    <div class="modal-wrapper">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="forceCloseModals()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="modal-title">SET DEFAULT TIMINGS</div>
+            <label class="setting-label">DEFAULT TIME IN</label><div class="input-group"><input type="time" id="s-timein"></div>
+            <label class="setting-label">DEFAULT TIME OUT</label><div class="input-group"><input type="time" id="s-timeout"></div>
+            <label class="setting-label">HALF DAY TIME OUT</label><div class="input-group"><input type="time" id="s-halfday"></div>
+            <button class="btn" onclick="saveSettings()">SAVE TIMINGS</button>
+        </div>
+    </div>
+</div>
+
+<!-- HIDDEN EXPORT CONTAINER -->
 <div id="export-container"></div>
 
-<!-- CLOUD FIRESTORE INTEGRATION (ADMIN) -->
+<!-- CLOUD FIRESTORE INTEGRATION & APP LOGIC -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, onSnapshot, enableNetwork, disableNetwork } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyATj9_cJpq0aWsUqqLzPSC-SWPtBuEagwc",
@@ -150,263 +468,275 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const docRef = doc(db, 'appData', 'techAsar'); // Using Firestore Document
+    const docRef = doc(db, 'appData', 'techAsar'); 
+    const backupDocRef = doc(db, 'appData', 'techAsar_backup'); // Manual Backup Doc
 
-    window.appData = { customers: [], workers: [], expenses: [], settings: { timeIn: '', timeOut: '', halfDay: '', darkMode: false, theme: '#007aff'} };
-    let initialLoad = true;
+    window.appData = { customers: [], workers: [], expenses: [], settings: { timeIn: '', timeOut: '', halfDay: '', darkMode: false } };
+    let isInitialLoad = true;
 
-    // Real-time Data Fetching (FIRESTORE)
+    // --- SMART NETWORK RESUME ---
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { disableNetwork(db).then(() => enableNetwork(db)); } });
+    window.addEventListener("online", () => { disableNetwork(db).then(() => enableNetwork(db)); });
+
+    // REAL-TIME AUTO SYNC (Auto Cloud Backup on Save)
     onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
             const val = docSnap.data();
-            window.appData = {
-                customers: val.customers || [],
-                workers: val.workers || [],
-                expenses: val.expenses || [],
-                settings: val.settings || window.appData.settings
-            };
+            window.appData = { customers: val.customers || [], workers: val.workers || [], expenses: val.expenses || [], settings: val.settings || window.appData.settings };
+            localStorage.setItem('techAsarCache', JSON.stringify(window.appData));
+            if (isInitialLoad) { window.applySettings(); isInitialLoad = false; }
+            window.refreshUI(false);
         }
-        if(initialLoad) {
-            document.getElementById('e-date').valueAsDate = new Date();
-            document.getElementById('s-timein').value = window.appData.settings.timeIn || '';
-            document.getElementById('s-timeout').value = window.appData.settings.timeOut || '';
-            document.getElementById('s-halfday').value = window.appData.settings.halfDay || '';
-            if(window.appData.settings.darkMode) {
-                document.documentElement.classList.add('dark-mode'); 
-                document.getElementById('dark-mode-toggle').checked = true;
-            }
-            initialLoad = false;
-        }
-        updateDashboard(); renderCustomers(); renderWorkers(); renderExpenses();
     });
 
-    // Save Data to FIRESTORE
+    const cachedData = localStorage.getItem('techAsarCache');
+    if(cachedData) { try { window.appData = JSON.parse(cachedData); window.applySettings(); window.refreshUI(true); } catch(e){} }
+
     window.saveData = function() {
-        setDoc(docRef, window.appData);
+        localStorage.setItem('techAsarCache', JSON.stringify(window.appData));
+        setDoc(docRef, window.appData).catch(err => console.error(err));
+        window.refreshUI(false);
     };
 
-    window.toggleDarkMode = function() {
-        window.appData.settings.darkMode = document.getElementById('dark-mode-toggle').checked;
-        if(window.appData.settings.darkMode) document.documentElement.classList.add('dark-mode');
-        else document.documentElement.classList.remove('dark-mode');
-        saveData();
-    };
-
-    window.saveSettings = function() {
-        window.appData.settings.timeIn = document.getElementById('s-timein').value;
-        window.appData.settings.timeOut = document.getElementById('s-timeout').value;
-        window.appData.settings.halfDay = document.getElementById('s-halfday').value;
-        saveData(); forceCloseModals(); showToast("TIMINGS SAVED");
-    };
-
-    window.clearAllData = function(e) {
-        showCustomConfirm(e, "ARE YOU ABSOLUTELY SURE? THIS WILL DELETE ALL DATA FOREVER!", () => {
-            window.appData.customers = []; window.appData.workers = []; window.appData.expenses = [];
-            saveData(); showToast("ALL DATA CLEARED");
-        });
-    };
-
-    // Keep all original UI functions
-    function lockMobileHeight() { document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); }
-    window.addEventListener('resize', () => { if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') lockMobileHeight(); });
-    lockMobileHeight();
-
-    document.querySelectorAll('.section').forEach(s => { let id = parseInt(s.id.replace('sec', '')); if (id > 1) s.classList.add('slide-right'); });
-
-    let confirmAction = null;
-    window.showCustomConfirm = function(e, message, actionCallback) { setOriginFromEvent(e); document.getElementById('confirmMessage').innerText = message; confirmAction = actionCallback; requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById('customConfirmOverlay').classList.add('show'); }); }); };
-    window.closeConfirm = function() { document.getElementById('customConfirmOverlay').classList.remove('show'); confirmAction = null; };
-    window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg.toUpperCase(); toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1500); };
-    
-    window.switchTab = function(tabId, el) {
-        document.querySelectorAll('.section').forEach(s => { let id = parseInt(s.id.replace('sec', '')); s.classList.remove('active', 'slide-left', 'slide-right'); if (id < tabId) s.classList.add('slide-left'); else if (id > tabId) s.classList.add('slide-right'); });
-        document.getElementById('sec' + tabId).classList.remove('slide-left', 'slide-right');
-        document.getElementById('sec' + tabId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active');
-    };
-
+    // UI Helpers & Animation Logic
     window.setOriginFromEvent = function(e) {
-        if (!e) return; let x = e.clientX; let y = e.clientY;
-        if (e.changedTouches && e.changedTouches.length > 0) { x = e.changedTouches[0].clientX; y = e.changedTouches[0].clientY; } else if (e.touches && e.touches.length > 0) { x = e.touches[0].clientX; y = e.touches[0].clientY; }
-        if (x !== undefined && y !== undefined) { document.documentElement.style.setProperty('--click-x', x + 'px'); document.documentElement.style.setProperty('--click-y', y + 'px'); }
+        if (!e) return;
+        let x = e.clientX; let y = e.clientY;
+        if (e.changedTouches && e.changedTouches.length > 0) { x = e.changedTouches[0].clientX; y = e.changedTouches[0].clientY; } 
+        else if (e.touches && e.touches.length > 0) { x = e.touches[0].clientX; y = e.touches[0].clientY; }
+        if (x !== undefined && y !== undefined) { 
+            document.documentElement.style.setProperty('--click-x', x + 'px'); 
+            document.documentElement.style.setProperty('--click-y', y + 'px'); 
+        }
     };
 
-    window.openModal = function(e, modalId) { setOriginFromEvent(e); requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById(modalId).classList.add('show'); }); }); };
-    window.closeModals = function(e) { if(e && e.target.classList.contains('modal-wrapper')) forceCloseModals(); };
-    window.forceCloseModals = function() { document.querySelectorAll('.modal-overlay, .fs-modal').forEach(m => m.classList.remove('show')); };
-    window.closeFSModal = function() { document.getElementById('fsModal').classList.remove('show'); };
+    window.openModal = function(e, modalId) { 
+        window.setOriginFromEvent(e);
+        requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById(modalId).classList.add('show'); }); });
+    };
+
+    window.closeModals = function(e) { if(e && e.target.classList.contains('modal-overlay')) window.forceCloseModals(); };
+    window.forceCloseModals = function() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show')); };
     
-    window.openFSModal = function(e, type) {
-        setOriginFromEvent(e); let title = ''; let contentHTML = '';
-        if(type === 'customers') { title = 'ALL CUSTOMERS'; window.appData.customers.forEach(c => { contentHTML += `<div class="fs-card glass-panel"><h3>${c.name}</h3><div><p style="font-size:10px; color:var(--text-sub);">TOTAL AMOUNT</p><p style="color:var(--text-main); font-weight:bold; text-align:right;">₹${c.total}</p></div></div>`; }); }
-        else if(type === 'revenue') { title = 'TOTAL RECEIVED'; window.appData.customers.forEach(c => { if(c.advance > 0) contentHTML += `<div class="fs-card glass-panel"><h3>${c.name}</h3><div><p style="font-size:10px; color:var(--text-sub);">RECEIVED</p><p style="color:var(--success); font-weight:bold; text-align:right;">₹${c.advance}</p></div></div>`; }); }
-        else if(type === 'pending') { title = 'PENDING AMOUNTS'; window.appData.customers.forEach(c => { if(c.pending > 0) contentHTML += `<div class="fs-card glass-panel"><h3>${c.name}</h3><div><p style="font-size:10px; color:var(--text-sub);">PENDING DUE</p><p style="color:var(--danger); font-weight:bold; text-align:right;">₹${c.pending}</p></div></div>`; }); }
-        else if(type === 'expenses') { title = 'ALL EXPENSES'; window.appData.expenses.forEach(e => { contentHTML += `<div class="fs-card glass-panel"><h3>${e.type}</h3><div><p style="font-size:10px; color:var(--text-sub);">${e.date}</p><p style="color:var(--danger); font-weight:bold; text-align:right;">-₹${e.amount}</p></div></div>`; }); }
-        document.getElementById('fs-title').innerText = title; document.getElementById('fs-content').innerHTML = contentHTML || '<p style="text-align:center; color:var(--text-sub); margin-top:30px; font-weight:600;">NO DATA RECORDED YET.</p>';
-        requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById('fsModal').classList.add('show'); }); });
+    window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000); };
+    
+    window.switchTab = function(tabId, el) { 
+        document.querySelectorAll('.section').forEach(s => { let id = parseInt(s.id.replace('sec', '')); s.classList.remove('active', 'slide-left', 'slide-right'); if (id < tabId) s.classList.add('slide-left'); else if (id > tabId) s.classList.add('slide-right'); }); 
+        document.getElementById('sec' + tabId).classList.remove('slide-left', 'slide-right'); document.getElementById('sec' + tabId).classList.add('active'); 
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); 
     };
+    
+    let confirmAction = null;
+    window.showCustomConfirm = function(e, message, actionCallback) { window.setOriginFromEvent(e); document.getElementById('confirmMessage').innerText = message; confirmAction = actionCallback; window.openModal(e, 'customConfirmOverlay'); };
+    window.closeConfirm = function() { document.getElementById('customConfirmOverlay').classList.remove('show'); confirmAction = null; };
+    document.getElementById('confirmBtn').addEventListener('click', () => { if(confirmAction) confirmAction(); window.closeConfirm(); });
 
+    // Swipe actions
     let activeSwipeCard = null, startX = 0;
-    window.ts = function(e) { if(e.target.closest('.action-btn') || e.target.closest('.delete-bg')) return; document.querySelectorAll('.list-card.swiped').forEach(card => { if(card !== e.currentTarget) card.classList.remove('swiped'); }); activeSwipeCard = e.currentTarget; startX = e.touches[0].clientX; };
+    window.ts = function(e) { if(e.target.closest('.delete-bg')) return; document.querySelectorAll('.admin-card.swiped').forEach(card => { if(card !== e.currentTarget) card.classList.remove('swiped'); }); activeSwipeCard = e.currentTarget; startX = e.touches[0].clientX; };
     window.tm = function(e) { if(!activeSwipeCard) return; let diff = startX - e.touches[0].clientX; if(diff > 40) { activeSwipeCard.classList.add('swiped'); activeSwipeCard = null; } else if (diff < -40) { activeSwipeCard.classList.remove('swiped'); activeSwipeCard = null; } };
 
-    window.deleteItem = function(e, type, id) {
-        e.stopPropagation();
-        showCustomConfirm(e, "ARE YOU SURE YOU WANT TO DELETE THIS ITEM?", () => {
-            if(type === 'cust') window.appData.customers = window.appData.customers.filter(c => c.id !== id);
-            if(type === 'work') window.appData.workers = window.appData.workers.filter(w => w.id !== id);
-            if(type === 'exp') window.appData.expenses = window.appData.expenses.filter(e => e.id !== id);
-            saveData(); showToast("ITEM DELETED");
+    // Formatters
+    window.countUpAnimation = function(element, start, end, duration, prefix = "") { let startTimestamp = null; const step = (timestamp) => { if (!startTimestamp) startTimestamp = timestamp; const progress = Math.min((timestamp - startTimestamp) / duration, 1); const easeProgress = 1 - Math.pow(1 - progress, 3); element.innerText = prefix + Math.floor(easeProgress * (end - start) + start).toLocaleString('en-IN'); if (progress < 1) window.requestAnimationFrame(step); else element.innerText = prefix + end.toLocaleString('en-IN'); }; window.requestAnimationFrame(step); };
+    window.formatDateStr = function(dateStr) { if(!dateStr) return '--'; if(/[a-zA-Z]/.test(dateStr)) return dateStr; let parts = dateStr.split(/[-/]/); if(parts.length === 3) { let d, m, y; if (parts[0].length === 4) { y = parseInt(parts[0]); m = parseInt(parts[1]); d = parseInt(parts[2]); } else { d = parseInt(parts[0]); m = parseInt(parts[1]); y = parseInt(parts[2]); if (m > 12) { let temp = d; d = m; m = temp; } } if (y < 100) y += 2000; const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]; return `${d.toString().padStart(2, '0')} ${months[m-1]} ${y}`; } return dateStr; };
+    window.formatTimeAMPM = function(timeStr) { if(!timeStr) return '--'; let [h, m] = timeStr.split(':'); let hours = parseInt(h); let ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12; hours = hours ? hours : 12; return `${hours}:${m} ${ampm}`; };
+
+    window.updateDashboard = function() {
+        let totalRev = 0, totalPend = 0, totalExp = 0; 
+        window.appData.customers.forEach(c => { totalRev += c.total; totalPend += c.pending; }); window.appData.expenses.forEach(e => { totalExp += e.amount; });
+        countUpAnimation(document.getElementById('dash-cust'), 0, window.appData.customers.length, 1000); 
+        countUpAnimation(document.getElementById('dash-rev'), 0, totalRev, 1000, "₹"); 
+        countUpAnimation(document.getElementById('dash-pend'), 0, totalPend, 1000, "₹"); 
+        countUpAnimation(document.getElementById('dash-exp'), 0, totalExp, 1000, "₹"); 
+    };
+
+    // Sleek Admin Renderings (Hiding detailed info in list, showing in modal)
+    window.renderCustomers = function(isInit) { 
+        const list = document.getElementById('customer-list'); let htmlBatch = ''; 
+        if(window.appData.customers.length === 0) { list.innerHTML = '<div class="empty-state">NO CLIENTS FOUND</div>'; return; }
+        window.appData.customers.slice().reverse().forEach((c, i) => { 
+            let fDate = window.formatDateStr(c.date); let animStyle = isInit ? `animation-delay: ${Math.min(i * 0.04, 0.4)}s;` : `animation: none; opacity: 1;`;
+            let pendClass = c.pending > 0 ? 'badge-red' : 'badge-green';
+            htmlBatch += `
+                <div class="swipe-container" style="${animStyle}">
+                    <div class="delete-bg" onclick="deleteItem(event, 'cust', ${c.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
+                    <div class="admin-card card-cust" onclick="openUpdateCustModal(event, ${c.id}, this)" ontouchstart="ts(event)" ontouchmove="tm(event)">
+                        <div class="card-left">
+                            <h3>${c.name}</h3>
+                            <p><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> ${c.mobile}</p>
+                        </div>
+                        <div class="card-right">
+                            <span class="card-badge ${pendClass}">PEND: ₹${c.pending}</span>
+                            <span class="card-date">${fDate}</span>
+                        </div>
+                    </div>
+                </div>`; 
+        }); 
+        list.innerHTML = htmlBatch; 
+    };
+
+    window.renderWorkers = function(isInit) { 
+        const list = document.getElementById('worker-list'); let htmlBatch = ''; const today = new Date().toLocaleDateString();
+        if(window.appData.workers.length === 0) { list.innerHTML = '<div class="empty-state">NO STAFF FOUND</div>'; return; }
+        window.appData.workers.forEach((w, i) => { 
+            if(w.advance === undefined) w.advance = 0; 
+            if(w.date !== today) { w.status = 'NO RECORD'; w.date = today; w.timeIn = ''; w.timeOut = ''; }
+            let fDate = window.formatDateStr(w.date); 
+            let sColorClass = w.status === 'PRESENT' ? 'badge-green' : w.status === 'HALF DAY' ? 'badge-orange' : w.status === 'ABSENT' ? 'badge-red' : 'badge-gray';
+            let animStyle = isInit ? `animation-delay: ${Math.min(i * 0.04, 0.4)}s;` : `animation: none; opacity: 1;`;
+            htmlBatch += `
+                <div class="swipe-container" style="${animStyle}">
+                    <div class="delete-bg" onclick="deleteItem(event, 'work', ${w.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
+                    <div class="admin-card card-work" onclick="openAttModal(event, ${w.id}, '${w.name}', this)" ontouchstart="ts(event)" ontouchmove="tm(event)">
+                        <div class="card-left">
+                            <h3>${w.name}</h3>
+                            <p style="color:var(--primary);">ADV: ₹${w.advance}</p>
+                        </div>
+                        <div class="card-right">
+                            <span class="card-badge ${sColorClass}">${w.status}</span>
+                            <span class="card-date">${fDate}</span>
+                        </div>
+                    </div>
+                </div>`; 
+        }); 
+        list.innerHTML = htmlBatch; 
+    };
+
+    window.renderExpenses = function(isInit) { 
+        const list = document.getElementById('expense-list'); let htmlBatch = ''; let exps = [...window.appData.expenses].sort((a,b) => b.id - a.id); 
+        if(exps.length === 0) { list.innerHTML = '<div class="empty-state">NO EXPENSES FOUND</div>'; return; }
+        exps.forEach((e, i) => { 
+            let fDate = window.formatDateStr(e.date); let animStyle = isInit ? `animation-delay: ${Math.min(i * 0.04, 0.4)}s;` : `animation: none; opacity: 1;`;
+            htmlBatch += `
+                <div class="swipe-container" style="${animStyle}">
+                    <div class="delete-bg" onclick="deleteItem(event, 'exp', ${e.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
+                    <div class="admin-card card-exp" ontouchstart="ts(event)" ontouchmove="tm(event)">
+                        <div class="card-left">
+                            <h3>${e.type}</h3>
+                            <p style="color:var(--danger); font-size:14px;">-₹${e.amount.toLocaleString('en-IN')}</p>
+                        </div>
+                        <div class="card-right">
+                            <span class="card-date" style="margin-top:auto;">${fDate}</span>
+                        </div>
+                    </div>
+                </div>`; 
+        }); 
+        list.innerHTML = htmlBatch; 
+    };
+
+    window.refreshUI = function(isInit) { window.updateDashboard(); window.renderCustomers(isInit); window.renderWorkers(isInit); window.renderExpenses(isInit); };
+
+    // Admin Logic 
+    window.calcCust = function() { const qty = parseFloat(document.getElementById('c-qty').value) || 0; const rate = parseFloat(document.getElementById('c-rate').value) || 0; const adv = parseFloat(document.getElementById('c-adv').value) || 0; const total = qty * rate; const pending = total - adv; document.getElementById('c-total-txt').innerText = "₹" + total; document.getElementById('c-recv-txt').innerText = "₹" + adv; document.getElementById('c-pend-txt').innerText = "₹" + pending; };
+    window.saveCustomer = function() { const name = document.getElementById('c-name').value; const mobile = document.getElementById('c-mobile').value; const item = document.getElementById('c-item').value; const qty = parseFloat(document.getElementById('c-qty').value) || 0; const rate = parseFloat(document.getElementById('c-rate').value) || 0; const adv = parseFloat(document.getElementById('c-adv').value) || 0; if(!name || qty <= 0 || rate <= 0) return window.showToast("ENTER VALID DETAILS!"); window.appData.customers.push({ id: Date.now(), name, mobile, item, qty, rate, advance: adv, total: (qty*rate), pending: ((qty*rate)-adv), date: new Date().toLocaleDateString() }); window.saveData(); window.forceCloseModals(); window.showToast("CLIENT SAVED!"); document.querySelectorAll('#addCustomerModal input').forEach(i => i.value = ''); document.getElementById('c-total-txt').innerText="₹0"; document.getElementById('c-recv-txt').innerText="₹0"; document.getElementById('c-pend-txt').innerText="₹0";};
+    
+    window.openUpdateCustModal = function(e, id, el) { if(el && el.classList.contains('swiped')) return; const c = window.appData.customers.find(x => x.id === id); if(!c) return; document.getElementById('up-cust-id').value = c.id; document.getElementById('up-cust-name').innerText = c.name; document.getElementById('up-pend-txt').innerText = "₹" + c.pending; document.getElementById('up-total-txt').innerText = "₹" + c.total; document.getElementById('up-recv-txt').innerText = "₹" + c.advance; document.getElementById('up-item-details').innerText = `ITEM: ${c.item} | QTY: ${c.qty} | RATE: ₹${c.rate}`; document.getElementById('up-amount-paid').value = ''; window.openModal(e, 'updateCustModal'); };
+    
+    // Validated Payment
+    window.processPayment = function() { 
+        const id = parseInt(document.getElementById('up-cust-id').value); 
+        const paid = parseFloat(document.getElementById('up-amount-paid').value) || 0; 
+        let c = window.appData.customers.find(x => x.id === id); 
+        if(!c) return;
+        if(paid <= 0) return window.showToast("ENTER VALID AMOUNT"); 
+        if(paid > c.pending) return window.showToast("CANNOT EXCEED PENDING (₹" + c.pending + ")");
+        
+        c.advance += paid; 
+        c.pending = c.total - c.advance; 
+        window.saveData(); 
+        window.forceCloseModals(); 
+        window.showToast("PAYMENT UPDATED!"); 
+    };
+
+    window.saveWorker = function() { const name = document.getElementById('w-name').value; if(!name) return; window.appData.workers.push({ id: Date.now(), name, status: 'NO RECORD', advance: 0, date: new Date().toLocaleDateString(), timeIn: '', timeOut: '', history: [] }); window.saveData(); window.forceCloseModals(); document.getElementById('w-name').value=''; window.showToast("STAFF ADDED"); };
+    window.openAttModal = function(e, id, name, el) { if(el && el.classList.contains('swiped')) return; let worker = window.appData.workers.find(w => w.id === id); document.getElementById('att-worker-name').innerText = name; document.getElementById('att-worker-id').value = id; document.getElementById('att-advance').value = ''; document.getElementById('att-timein').value = worker.timeIn || window.appData.settings.timeIn || ''; document.getElementById('att-timeout').value = worker.timeOut || window.appData.settings.timeOut || ''; window.openModal(e, 'attendanceModal'); };
+    function updateWorkerHistory(worker, status, adv, tIn, tOut) { if(!worker.history) worker.history = []; let today = new Date().toLocaleDateString(); let entry = worker.history.find(h => h.date === today); if(entry) { if(status) entry.status = status; if(tIn) entry.timeIn = tIn; if(tOut) entry.timeOut = tOut; entry.adv += adv; } else { worker.history.push({ date: today, status: status || 'NO RECORD', timeIn: tIn || '', timeOut: tOut || '', adv: adv }); } }
+    window.saveAdvanceOnly = function() { const id = parseInt(document.getElementById('att-worker-id').value); const adv = parseFloat(document.getElementById('att-advance').value) || 0; const tIn = document.getElementById('att-timein').value; const tOut = document.getElementById('att-timeout').value; let worker = window.appData.workers.find(w => w.id === id); if(worker) { worker.advance += adv; worker.timeIn = tIn; worker.timeOut = tOut; worker.date = new Date().toLocaleDateString(); updateWorkerHistory(worker, null, adv, tIn, tOut); } window.saveData(); window.forceCloseModals(); window.showToast("UPDATED"); };
+    window.markAttendance = function(status) { const id = parseInt(document.getElementById('att-worker-id').value); const adv = parseFloat(document.getElementById('att-advance').value) || 0; const tIn = document.getElementById('att-timein').value; let tOut = document.getElementById('att-timeout').value; if(status === 'HALF DAY' && !tOut && window.appData.settings.halfDay) tOut = window.appData.settings.halfDay; let worker = window.appData.workers.find(w => w.id === id); if(worker) { worker.status = status; worker.advance += adv; worker.timeIn = tIn; worker.timeOut = tOut; worker.date = new Date().toLocaleDateString(); updateWorkerHistory(worker, status, adv, tIn, tOut); } window.saveData(); window.forceCloseModals(); window.showToast("ATTENDANCE MARKED"); };
+
+    window.saveExpense = function() { const type = document.getElementById('e-type').value; const amt = parseFloat(document.getElementById('e-amount').value); const date = document.getElementById('e-date').value; if(!amt || !date) return window.showToast("ENTER VALID DETAILS"); window.appData.expenses.push({ id: Date.now(), type, amount: amt, date: new Date(date).toLocaleDateString() }); window.saveData(); window.forceCloseModals(); document.getElementById('e-amount').value=''; window.showToast("EXPENSE SAVED"); };
+
+    window.deleteItem = function(e, type, id) { e.stopPropagation(); window.showCustomConfirm(e, "ARE YOU SURE YOU WANT TO DELETE THIS ITEM?", () => { if(type === 'cust') window.appData.customers = window.appData.customers.filter(c => c.id !== id); if(type === 'work') window.appData.workers = window.appData.workers.filter(w => w.id !== id); if(type === 'exp') window.appData.expenses = window.appData.expenses.filter(e => e.id !== id); window.saveData(); window.showToast("ITEM DELETED"); }); };
+
+    window.toggleDarkMode = function() { window.appData.settings.darkMode = document.getElementById('dark-mode-toggle').checked; if(window.appData.settings.darkMode) document.documentElement.classList.add('dark-mode'); else document.documentElement.classList.remove('dark-mode'); window.saveData(); };
+    window.saveSettings = function() { window.appData.settings.timeIn = document.getElementById('s-timein').value; window.appData.settings.timeOut = document.getElementById('s-timeout').value; window.appData.settings.halfDay = document.getElementById('s-halfday').value; window.saveData(); window.forceCloseModals(); window.showToast("TIMINGS SAVED"); };
+    window.clearAllData = function(e) { window.showCustomConfirm(e, "THIS WILL DELETE ALL DATA FOREVER!", () => { window.appData.customers = []; window.appData.workers = []; window.appData.expenses = []; window.saveData(); window.showToast("ALL DATA CLEARED"); }); };
+
+    // Manual Cloud Backup & Restore
+    window.manualCloudBackup = function(e) {
+        window.showCustomConfirm(e, "CREATE A MANUAL CLOUD SNAPSHOT?", () => {
+            window.showToast("BACKING UP...");
+            setDoc(backupDocRef, window.appData).then(() => {
+                window.showToast("CLOUD BACKUP SUCCESSFUL");
+            }).catch(err => {
+                window.showToast("BACKUP FAILED");
+                console.error(err);
+            });
         });
     };
 
-    window.countUpAnimation = function(element, start, end, duration, prefix = "") {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const easeProgress = 1 - Math.pow(1 - progress, 3);
-            element.innerText = prefix + Math.floor(easeProgress * (end - start) + start);
-            if (progress < 1) window.requestAnimationFrame(step); else element.innerText = prefix + end;
-        };
-        window.requestAnimationFrame(step);
+    window.manualCloudRestore = function(e) {
+        window.showCustomConfirm(e, "RESTORE DATA FROM CLOUD? THIS WILL OVERWRITE CURRENT APP DATA.", () => {
+            window.showToast("RESTORING DATA...");
+            getDoc(backupDocRef).then((docSnap) => {
+                if (docSnap.exists()) {
+                    window.appData = docSnap.data();
+                    window.saveData();
+                    window.showToast("RESTORE SUCCESSFUL");
+                } else {
+                    window.showToast("NO CLOUD BACKUP FOUND");
+                }
+            }).catch(err => {
+                window.showToast("RESTORE FAILED");
+                console.error(err);
+            });
+        });
     };
 
-    window.updateDashboard = function() {
-        let totalRev = 0, totalPend = 0, totalExp = 0;
-        window.appData.customers.forEach(c => { totalRev += c.total; totalPend += c.pending; });
-        window.appData.expenses.forEach(e => { totalExp += e.amount; });
-        countUpAnimation(document.getElementById('dash-cust'), 0, window.appData.customers.length, 1000);
-        countUpAnimation(document.getElementById('dash-rev'), 0, totalRev, 1000, "₹");
-        countUpAnimation(document.getElementById('dash-pend'), 0, totalPend, 1000, "₹");
-        countUpAnimation(document.getElementById('dash-exp'), 0, totalExp, 1000, "₹");
-        let maxFin = totalRev + totalPend + totalExp || 1; 
-        setTimeout(() => {
-            document.getElementById('ring-cust').setAttribute('stroke-dasharray', `${Math.min((window.appData.customers.length / 50) * 120, 120)}, 120`);
-            document.getElementById('ring-rev').setAttribute('stroke-dasharray', `${Math.min((totalRev / maxFin) * 95, 95)}, 95`);
-            document.getElementById('ring-pend').setAttribute('stroke-dasharray', `${Math.min((totalPend / maxFin) * 70, 70)}, 70`);
-            document.getElementById('ring-exp').setAttribute('stroke-dasharray', `${Math.min((totalExp / maxFin) * 44, 44)}, 44`);
-        }, 50);
-    };
+    window.applySettings = function() { if(document.getElementById('e-date')) document.getElementById('e-date').valueAsDate = new Date(); document.getElementById('s-timein').value = window.appData.settings.timeIn || ''; document.getElementById('s-timeout').value = window.appData.settings.timeOut || ''; document.getElementById('s-halfday').value = window.appData.settings.halfDay || ''; if(window.appData.settings.darkMode) { document.documentElement.classList.add('dark-mode'); document.getElementById('dark-mode-toggle').checked = true; } };
 
-    window.calcCust = function() {
-        const qty = parseFloat(document.getElementById('c-qty').value) || 0; const rate = parseFloat(document.getElementById('c-rate').value) || 0; const adv = parseFloat(document.getElementById('c-adv').value) || 0;
-        const total = qty * rate; const pending = total - adv;
-        document.getElementById('c-total-txt').innerText = "₹" + total; document.getElementById('c-recv-txt').innerText = "₹" + adv; document.getElementById('c-pend-txt').innerText = "₹" + pending;
-    };
-
-    window.saveCustomer = function() {
-        const name = document.getElementById('c-name').value; const mobile = document.getElementById('c-mobile').value; const item = document.getElementById('c-item').value;
-        const qty = parseFloat(document.getElementById('c-qty').value) || 0; const rate = parseFloat(document.getElementById('c-rate').value) || 0; const adv = parseFloat(document.getElementById('c-adv').value) || 0;
-        if(!name || qty <= 0 || rate <= 0) return showToast("ENTER VALID DETAILS!");
-        window.appData.customers.push({ id: Date.now(), name, mobile, item, qty, rate, advance: adv, total: (qty*rate), pending: ((qty*rate)-adv), date: new Date().toLocaleDateString() });
-        saveData(); forceCloseModals(); showToast("CUSTOMER SAVED!");
-        document.querySelectorAll('#addCustomerModal input').forEach(i => i.value = '');
-    };
-
-    window.openUpdateCustModal = function(e, id, el) {
-        if(el && el.classList.contains('swiped')) return;
-        const c = window.appData.customers.find(x => x.id === id); if(!c) return;
-        document.getElementById('up-cust-id').value = c.id; document.getElementById('up-cust-name').innerText = c.name;
-        document.getElementById('up-pend-txt').innerText = "₹" + c.pending; document.getElementById('up-total-txt').innerText = "₹" + c.total; document.getElementById('up-recv-txt').innerText = "₹" + c.advance;
-        document.getElementById('up-item-details').innerText = `ITEM: ${c.item} | QTY: ${c.qty} | RATE: ₹${c.rate}`; document.getElementById('up-date-details').innerText = `DATE: ${c.date}`; document.getElementById('up-amount-paid').value = '';
-        openModal(e, 'updateCustModal');
-    };
-
-    window.processPayment = function() {
-        const id = parseInt(document.getElementById('up-cust-id').value); const paid = parseFloat(document.getElementById('up-amount-paid').value) || 0;
-        if(paid <= 0) return showToast("ENTER VALID AMOUNT");
-        let c = window.appData.customers.find(x => x.id === id);
-        if(c) { c.advance += paid; c.pending = c.total - c.advance; saveData(); forceCloseModals(); showToast("PAYMENT UPDATED!"); }
-    };
-
-    window.renderCustomers = function() {
-        const search = document.getElementById('search-cust') ? document.getElementById('search-cust').value.toLowerCase() : ''; const list = document.getElementById('customer-list'); let htmlBatch = '';
-        window.appData.customers.filter(c => c.name.toLowerCase().includes(search) || c.mobile.includes(search)).forEach(c => {
-            htmlBatch += `<div class="swipe-container"><div class="delete-bg" onclick="deleteItem(event, 'cust', ${c.id})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
-                    <div class="list-card" onclick="openUpdateCustModal(event, ${c.id}, this)" ontouchstart="ts(event)" ontouchmove="tm(event)"><div class="list-info"><h3>${c.name}</h3><p>${c.date} | ${c.item}</p><p>QTY: ${c.qty} | <strong style="color:var(--danger);">PEND: ₹${c.pending}</strong></p></div>
-                    <button class="action-btn" onclick="exportReceiptImage(event, ${c.id})"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button></div></div>`;
-        }); list.innerHTML = htmlBatch;
-    };
-
-    window.saveWorker = function() {
-        const name = document.getElementById('w-name').value; if(!name) return;
-        window.appData.workers.push({ id: Date.now(), name, status: 'NO RECORD', advance: 0, date: new Date().toLocaleDateString(), timeIn: '', timeOut: '', history: [] });
-        saveData(); forceCloseModals(); document.getElementById('w-name').value=''; showToast("WORKER ADDED");
-    };
-
-    window.renderWorkers = function() {
-        const list = document.getElementById('worker-list'); let htmlBatch = ''; const today = new Date().toLocaleDateString();
-        window.appData.workers.forEach(w => {
-            if(w.advance === undefined) w.advance = 0; let sColor = w.status === 'PRESENT' ? 'var(--success)' : w.status === 'HALF DAY' ? 'var(--warning)' : w.status === 'ABSENT' ? 'var(--danger)' : 'var(--text-sub)';
-            if(w.date !== today) { w.status = 'NO RECORD'; w.date = today; w.timeIn = ''; w.timeOut = ''; } let timeInfo = ''; if(w.timeIn || w.timeOut) { timeInfo = ` | IN: ${w.timeIn || '--'} OUT: ${w.timeOut || '--'}`; }
-            htmlBatch += `<div class="swipe-container"><div class="delete-bg" onclick="deleteItem(event, 'work', ${w.id})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
-                    <div class="list-card" onclick="openAttModal(event, ${w.id}, '${w.name}', this)" ontouchstart="ts(event)" ontouchmove="tm(event)"><div class="list-info"><h3>${w.name}</h3><p style="text-transform:none;">DATE: ${w.date}${timeInfo}</p><p style="color:${sColor}; font-weight:800;">STATUS: ${w.status}</p></div>
-                    <div class="action-group"><button class="action-btn dl-btn" onclick="exportWorkerImage(event, ${w.id})"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button></div></div></div>`;
-        }); list.innerHTML = htmlBatch;
-    };
-
-    window.openAttModal = function(e, id, name, el) {
-        if(el && el.classList.contains('swiped')) return;
-        let worker = window.appData.workers.find(w => w.id === id); document.getElementById('att-worker-name').innerText = name; document.getElementById('att-worker-id').value = id; document.getElementById('att-advance').value = ''; 
-        document.getElementById('att-timein').value = worker.timeIn || window.appData.settings.timeIn || ''; document.getElementById('att-timeout').value = worker.timeOut || window.appData.settings.timeOut || '';
-        openModal(e, 'attendanceModal');
-    };
-
-    function updateWorkerHistory(worker, status, adv, tIn, tOut) {
-        if(!worker.history) worker.history = []; let today = new Date().toLocaleDateString(); let entry = worker.history.find(h => h.date === today);
-        if(entry) { if(status) entry.status = status; if(tIn) entry.timeIn = tIn; if(tOut) entry.timeOut = tOut; entry.adv += adv; } else { worker.history.push({ date: today, status: status || 'NO RECORD', timeIn: tIn || '', timeOut: tOut || '', adv: adv }); }
-    }
-
-    window.saveAdvanceOnly = function() {
-        const id = parseInt(document.getElementById('att-worker-id').value); const adv = parseFloat(document.getElementById('att-advance').value) || 0; const tIn = document.getElementById('att-timein').value; const tOut = document.getElementById('att-timeout').value;
-        let worker = window.appData.workers.find(w => w.id === id); if(worker) { worker.advance += adv; worker.timeIn = tIn; worker.timeOut = tOut; worker.date = new Date().toLocaleDateString(); updateWorkerHistory(worker, null, adv, tIn, tOut); } saveData(); forceCloseModals(); showToast("UPDATED");
-    };
-
-    window.markAttendance = function(status) {
-        const id = parseInt(document.getElementById('att-worker-id').value); const adv = parseFloat(document.getElementById('att-advance').value) || 0; const tIn = document.getElementById('att-timein').value; const tOut = document.getElementById('att-timeout').value;
-        let worker = window.appData.workers.find(w => w.id === id); if(worker) { worker.status = status; worker.advance += adv; worker.timeIn = tIn; worker.timeOut = tOut; worker.date = new Date().toLocaleDateString(); updateWorkerHistory(worker, status, adv, tIn, tOut); } saveData(); forceCloseModals(); showToast("ATTENDANCE MARKED");
-    };
-
-    window.saveExpense = function() {
-        const type = document.getElementById('e-type').value; const amt = parseFloat(document.getElementById('e-amount').value); const date = document.getElementById('e-date').value;
-        if(!amt) return showToast("ENTER VALID AMOUNT"); window.appData.expenses.push({ id: Date.now(), type, amount: amt, date }); saveData(); forceCloseModals(); document.getElementById('e-amount').value=''; showToast("EXPENSE SAVED");
-    };
-
-    window.renderExpenses = function() {
-        const list = document.getElementById('expense-list'); let htmlBatch = ''; let exps = [...window.appData.expenses].sort((a,b) => b.id - a.id);
-        exps.forEach(e => { htmlBatch += `<div class="swipe-container"><div class="delete-bg" onclick="deleteItem(event, 'exp', ${e.id})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
-                    <div class="list-card" ontouchstart="ts(event)" ontouchmove="tm(event)"><div class="list-info"><h3>${e.type}</h3><p>${e.date}</p></div><div style="font-weight:800; color:var(--danger); font-size:16px;">-₹${e.amount}</div></div></div>`;
-        }); list.innerHTML = htmlBatch;
-    };
-
+    // Export Logic HD
     window.generateAndDownloadHDImage = function(htmlContent, filename) {
-        showToast("GENERATING IMAGE..."); const container = document.getElementById('export-container'); container.innerHTML = htmlContent;
-        html2canvas(container, { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false }).then(canvas => { const link = document.createElement('a'); link.download = filename + '.jpg'; link.href = canvas.toDataURL("image/jpeg", 1.0); link.click(); container.innerHTML = ''; showToast("DOWNLOAD COMPLETE"); }).catch(err => { console.error(err); showToast("EXPORT ERROR"); });
+        window.showToast("GENERATING HD IMAGE..."); const container = document.getElementById('export-container'); container.innerHTML = htmlContent;
+        if (typeof html2canvas === 'undefined') { window.showToast("SCRIPT LOADING, TRY AGAIN"); return; }
+        setTimeout(() => { html2canvas(container, { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false }).then(canvas => { const link = document.createElement('a'); link.download = filename + '.jpg'; link.href = canvas.toDataURL("image/jpeg", 1.0); link.click(); container.innerHTML = ''; window.showToast("DOWNLOAD COMPLETE"); }).catch(err => { console.error(err); window.showToast("EXPORT ERROR"); container.innerHTML = ''; }); }, 400); 
     };
 
-    window.exportReceiptImage = function(e, id) {
-        e.stopPropagation(); const c = window.appData.customers.find(x => x.id === id); if(!c) return; const invNo = "INV-" + Math.floor(1000 + Math.random() * 9000);
-        const content = `<div class="export-invoice-box"><div class="inv-header"><div class="inv-header-left"><h1>TECH ASAR</h1><p>PREMIUM POWDER COATING</p></div><div class="inv-header-right"><h2>INVOICE</h2><p>${c.date}</p></div></div><div class="inv-details"><div><p class="label">BILLED TO</p><p style="font-weight:800; font-size:22px;">${c.name}</p><p style="color:#666; font-size:16px;">+91 ${c.mobile}</p></div><div style="text-align: right;"><p class="label">INVOICE NO</p><p style="font-weight:800; font-size:22px;">#${invNo}</p></div></div><table class="inv-table"><thead><tr><th>DESCRIPTION</th><th class="center">QTY</th><th class="right">AMOUNT</th></tr></thead><tbody><tr><td><span style="font-size:20px; font-weight:800; color:#1c1c1e;">${c.item}</span><br><span style="font-size:15px; color:#888;">RATE: ₹${c.rate}</span></td><td class="center" style="font-size:20px;">${c.qty}</td><td class="right" style="font-size:20px; color:#007aff;">₹${c.total}</td></tr></tbody></table><div style="margin-left: 50%;"><div class="inv-row"><span>SUBTOTAL</span><strong>₹${c.total}</strong></div><div class="inv-row" style="color:#34c759;"><span>ADVANCE PAID</span><strong>- ₹${c.advance}</strong></div><div class="inv-total-row"><span>PENDING DUE</span><span>₹${c.pending}</span></div></div><div class="inv-footer"><p>THANK YOU FOR YOUR BUSINESS!</p></div></div>`;
-        generateAndDownloadHDImage(content, `Receipt_${c.name.replace(/\s+/g, '_')}`);
+    window.exportDataImage = function(type) { 
+        let tableHTML = ''; let title = ''; let theadBg = '';
+        if(type === 'customers') { 
+            title = 'CUSTOMER RECORDS EXPORT'; theadBg = '#0d6efd';
+            tableHTML += `<thead><tr><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">DATE</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">NAME</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">MOBILE</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">ITEM</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">QTY</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">RATE</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">TOTAL AMT</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">RECEIVED</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">PENDING</th></tr></thead><tbody>`; 
+            let tQty=0, tTotal=0, tRecv=0, tPend=0; 
+            window.appData.customers.forEach(c => { 
+                tableHTML += `<tr><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${c.date}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#000; font-weight:bold;">${c.name}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${c.mobile}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${c.item}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${c.qty}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${c.rate}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#0d6efd; font-weight:900;">${c.total}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#16a34a; font-weight:900;">${c.advance}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#dc2626; font-weight:900;">${c.pending}</td></tr>`; 
+                tQty+=c.qty; tTotal+=c.total; tRecv+=c.advance; tPend+=c.pending; 
+            }); 
+            tableHTML += `<tr style="background-color: #f8f9fa;"><td colspan="4" style="padding:15px 12px; border:2px solid #e5e7eb; color:#000; font-weight:900; text-align:right;">GRAND TOTAL:</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#0d6efd; font-weight:900;">${tQty}</td><td style="padding:15px 12px; border:2px solid #e5e7eb;"></td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#0d6efd; font-weight:900;">${tTotal}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#16a34a; font-weight:900;">${tRecv}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#dc2626; font-weight:900;">${tPend}</td></tr></tbody>`; 
+        } 
+        else if(type === 'workers') { 
+            title = 'WORKERS ATTENDANCE EXPORT'; theadBg = '#d97706'; 
+            tableHTML += `<thead><tr><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">DATE</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">NAME</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">STATUS</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">TIME IN</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">TIME OUT</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">ADVANCE</th></tr></thead><tbody>`; 
+            window.appData.workers.forEach(w => { 
+                let sColor = w.status === 'PRESENT' ? '#16a34a' : w.status === 'HALF DAY' ? '#d97706' : w.status === 'ABSENT' ? '#dc2626' : '#666'; let tIn = window.formatTimeAMPM(w.timeIn); let tOut = window.formatTimeAMPM(w.timeOut);
+                tableHTML += `<tr><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${w.date}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#000; font-weight:bold;">${w.name}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:${sColor}; font-weight:900;">${w.status}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${tIn}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${tOut}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#0d6efd; font-weight:900;">${w.advance}</td></tr>`; 
+            }); 
+            tableHTML += '</tbody>';
+        } 
+        else if(type === 'expenses') { 
+            title = 'EXPENSES RECORDS EXPORT'; theadBg = '#dc2626'; 
+            tableHTML += `<thead><tr><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">DATE</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">EXPENSE TYPE</th><th style="background:${theadBg}; color:#fff; padding:15px 12px; border:2px solid #e5e7eb; font-weight:900;">AMOUNT (₹)</th></tr></thead><tbody>`; 
+            let tAmt=0; 
+            window.appData.expenses.forEach(e => { tableHTML += `<tr><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#333;">${e.date}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#000; font-weight:bold;">${e.type}</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#dc2626; font-weight:900;">${e.amount}</td></tr>`; tAmt+=e.amount; }); 
+            tableHTML += `<tr style="background-color: #f8f9fa;"><td colspan="2" style="padding:15px 12px; border:2px solid #e5e7eb; color:#000; font-weight:900; text-align:right;">TOTAL EXPENSES:</td><td style="padding:15px 12px; border:2px solid #e5e7eb; color:#dc2626; font-weight:900;">${tAmt}</td></tr></tbody>`; 
+        } 
+        
+        let finalHTML = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 50px; background: #ffffff; width: 100%; box-sizing: border-box; text-align: center;"><h2 style="font-size: 32px; font-weight: 900; color: #000; margin-bottom: 30px; text-transform: uppercase; letter-spacing: -0.5px;">${title}</h2><table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 15px;">${tableHTML}</table></div>`;
+        let d = new Date(); let fileName = `${type}_export_${d.getDate()}_${d.getMonth()+1}_${d.getFullYear()}`; window.generateAndDownloadHDImage(finalHTML, fileName); 
     };
 
-    window.formatTimeAMPM = function(timeStr) { if(!timeStr) return '--'; let [h, m] = timeStr.split(':'); let hours = parseInt(h); let ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12; hours = hours ? hours : 12; return `${hours}:${m} ${ampm}`; };
-
-    window.exportWorkerImage = function(e, id) {
-        e.stopPropagation(); const w = window.appData.workers.find(x => x.id === id); if(!w) return; let historyHTML = '';
-        if(w.history && w.history.length > 0) { w.history.forEach(h => { let hColor = h.status === 'PRESENT' ? '#16a34a' : h.status === 'HALF DAY' ? '#ca8a04' : h.status === 'ABSENT' ? '#dc2626' : '#8e8e93'; historyHTML += `<tr><td>${h.date}</td><td style="color:${hColor}; font-weight:bold;">${h.status}</td><td>${formatTimeAMPM(h.timeIn)}</td><td>${formatTimeAMPM(h.timeOut)}</td><td style="color:#007aff; font-weight:bold;">₹${h.adv}</td></tr>`; }); } else { let sColor = w.status === 'PRESENT' ? '#16a34a' : w.status === 'HALF DAY' ? '#ca8a04' : w.status === 'ABSENT' ? '#dc2626' : '#8e8e93'; historyHTML = `<tr><td>${w.date}</td><td style="color:${sColor}; font-weight:bold;">${w.status}</td><td>${formatTimeAMPM(w.timeIn)}</td><td>${formatTimeAMPM(w.timeOut)}</td><td style="color:#007aff; font-weight:bold;">₹${w.advance}</td></tr>`; }
-        const content = `<div style="width: 100%; border: 3px solid #007aff; border-radius: 12px; padding: 25px; text-align: center; background:#ffffff;"><p style="font-size: 20px; color:#007aff; font-weight:800; margin-bottom: 5px; text-transform:uppercase;">WORKER FULL REPORT</p><p style="font-size: 18px; color:#333; margin-bottom: 15px; font-weight:700;">${w.name.toUpperCase()}</p><hr style="border-top:1px solid #007aff; margin-bottom:20px;"><div style="text-align: left; font-size: 16px; margin-bottom: 20px; font-weight:700; color:#000;">TOTAL ADVANCE TAKEN: <span style="color:#007aff;">₹${w.advance}</span></div><table class="export-table" style="width:100%; font-size: 12px; border-collapse: collapse; border: 2px solid #ddd;"><thead><tr><th style="background:#007aff; color:#fff; border: 1px solid #ddd;">DATE</th><th style="background:#007aff; color:#fff; border: 1px solid #ddd;">STATUS</th><th style="background:#007aff; color:#fff; border: 1px solid #ddd;">TIME IN</th><th style="background:#007aff; color:#fff; border: 1px solid #ddd;">TIME OUT</th><th style="background:#007aff; color:#fff; border: 1px solid #ddd;">ADV GIVEN</th></tr></thead><tbody>${historyHTML}</tbody></table></div>`;
-        generateAndDownloadHDImage(content, `Worker_Report_${w.name.replace(/\s+/g, '_')}`);
-    };
-
-    window.exportDataImage = function(e, type) {
-        setOriginFromEvent(e); forceCloseModals(); let tableHTML = '<tr>'; let title = ''; let filename = '';
-        if(type === 'customers') { title = 'CUSTOMER RECORDS EXPORT'; filename = 'Customers_Data'; tableHTML += '<th style="background:#007aff; color:#fff;">DATE</th><th style="background:#007aff; color:#fff;">NAME</th><th style="background:#007aff; color:#fff;">MOBILE</th><th style="background:#007aff; color:#fff;">ITEM</th><th style="background:#007aff; color:#fff;">QTY</th><th style="background:#007aff; color:#fff;">RATE</th><th style="background:#007aff; color:#fff;">TOTAL AMT</th><th style="background:#007aff; color:#fff;">RECEIVED</th><th style="background:#007aff; color:#fff;">PENDING</th></tr>'; let tQty=0, tTotal=0, tRecv=0, tPend=0; window.appData.customers.forEach(c => { tableHTML += `<tr><td>${c.date}</td><td>${c.name}</td><td>${c.mobile}</td><td>${c.item}</td><td>${c.qty}</td><td>${c.rate}</td><td style="color:#0284c7; font-weight:bold;">${c.total}</td><td style="color:#16a34a; font-weight:bold;">${c.advance}</td><td style="color:#dc2626; font-weight:bold;">${c.pending}</td></tr>`; tQty+=c.qty; tTotal+=c.total; tRecv+=c.advance; tPend+=c.pending; }); tableHTML += `<tr style="font-weight: 900; background-color: #f8f9fa;"><td colspan="4" style="text-align:right; color:#000;">GRAND TOTAL:</td><td style="color:#0284c7;">${tQty}</td><td></td><td style="color:#0284c7;">${tTotal}</td><td style="color:#16a34a;">${tRecv}</td><td style="color:#dc2626;">${tPend}</td></tr>`; }
-        else if(type === 'expenses') { title = 'EXPENSE RECORDS EXPORT'; filename = 'Expenses_Data'; tableHTML += '<th style="background:#dc2626; color:#fff;">DATE</th><th style="background:#dc2626; color:#fff;">EXPENSE TYPE</th><th style="background:#dc2626; color:#fff;">AMOUNT</th></tr>'; let tAmt=0; window.appData.expenses.forEach(e => { tableHTML += `<tr><td>${e.date}</td><td>${e.type}</td><td style="color:#dc2626; font-weight:bold;">${e.amount}</td></tr>`; tAmt+=e.amount; }); tableHTML += `<tr style="font-weight: 900; background-color: #f8f9fa;"><td colspan="2" style="text-align:right; color:#000;">TOTAL EXPENSES:</td><td style="color:#dc2626;">${tAmt}</td></tr>`; }
-        else if(type === 'workers') { title = 'WORKERS ATTENDANCE EXPORT'; filename = 'Workers_Data'; tableHTML += '<th style="background:#ca8a04; color:#fff;">DATE</th><th style="background:#ca8a04; color:#fff;">NAME</th><th style="background:#ca8a04; color:#fff;">STATUS</th><th style="background:#ca8a04; color:#fff;">TIME IN</th><th style="background:#ca8a04; color:#fff;">TIME OUT</th><th style="background:#ca8a04; color:#fff;">ADVANCE</th></tr>'; window.appData.workers.forEach(w => { let sColor = w.status === 'PRESENT' ? '#16a34a' : w.status === 'HALF DAY' ? '#ca8a04' : w.status === 'ABSENT' ? '#dc2626' : '#8e8e93'; tableHTML += `<tr><td>${w.date}</td><td>${w.name}</td><td style="color:${sColor}; font-weight:bold;">${w.status}</td><td>${formatTimeAMPM(w.timeIn)}</td><td>${formatTimeAMPM(w.timeOut)}</td><td style="color:#007aff; font-weight:bold;">${w.advance}</td></tr>`; }); }
-        const content = `<div style="width: 100%;"><h2 class="export-title">${title}</h2><table class="export-table">${tableHTML}</table></div>`; setTimeout(() => { generateAndDownloadHDImage(content, filename); }, 350);
-    };
+    window.addEventListener('resize', () => { document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); }); document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    document.querySelectorAll('.section').forEach(s => { let id = parseInt(s.id.replace('sec', '')); if (id > 1) s.classList.add('slide-right'); });
 </script>
 </body>
 </html>
