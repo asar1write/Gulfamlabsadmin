@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Tech Asar - ADMIN PRO</title>
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 
 <!-- HTML2Canvas library for Ultra HD Image Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -20,9 +20,12 @@
         --warning: #D97706; 
         --danger:  #DC2626; 
         
-        --bg-main: #F1F5F9; --card-bg: #FFFFFF; 
-        --text-main: #0F172A; --text-sub: #64748B; 
-        --nav-bg: rgba(255, 255, 255, 0.9); --glass-border: rgba(0, 0, 0, 0.06);
+        --bg-main: #FFFFFF; 
+        --card-bg: #FFFFFF; 
+        --text-main: #0F172A; 
+        --text-sub: #64748B; 
+        --nav-bg: rgba(255, 255, 255, 0.95); 
+        --glass-border: #E2E8F0;
         --box-bg: #F8FAFC; 
         
         --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -33,29 +36,21 @@
         --click-y: 50vh; 
     }
     
-    html.dark-mode { 
-        --bg-main: #020617; --card-bg: #0F172A; 
-        --text-main: #F8FAFC; --text-sub: #94A3B8; 
-        --nav-bg: rgba(15, 23, 42, 0.9); --glass-border: rgba(255, 255, 255, 0.08);
-        --box-bg: #1E293B; 
-        color-scheme: dark; 
-    }
-    
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-font-smoothing: antialiased; text-transform: uppercase; }
     input, select, textarea { user-select: auto; }
     
-    body { height: 100vh; height: calc(var(--vh, 1vh) * 100); width: 100%; overflow: hidden; background-color: var(--bg-main); color: var(--text-main); transition: background-color 0.4s ease; }
+    body { height: 100vh; height: calc(var(--vh, 1vh) * 100); width: 100%; overflow: hidden; background-color: var(--bg-main); color: var(--text-main); }
     
     #app { width: 100%; max-width: 500px; height: 100%; position: absolute; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; overflow: hidden; }
     
     /* =========================================
        2. CLEAN LAYOUT & BOTTOM LOCKED NAV
        ========================================= */
-    .section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: max(env(safe-area-inset-top), 20px) 20px calc(env(safe-area-inset-bottom) + 85px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.4s var(--app-launch), visibility 0.4s; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; will-change: opacity, transform, visibility; }
+    .section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: max(env(safe-area-inset-top), 30px) 20px calc(env(safe-area-inset-bottom) + 85px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.4s var(--app-launch), visibility 0.4s; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; will-change: opacity, transform, visibility; }
     .section.active { opacity: 1; visibility: visible; transform: translate3d(0,0,0); z-index: 10; }
     .section.slide-left { transform: translate3d(-40px, 0, 0); } .section.slide-right { transform: translate3d(40px, 0, 0); } .section::-webkit-scrollbar { display: none; }
     
-    .content-wrapper { display: flex; flex-direction: column; justify-content: flex-start; flex: 1; padding-top: 5px; padding-bottom: 20px;}
+    .content-wrapper { display: flex; flex-direction: column; justify-content: flex-start; flex: 1; padding-bottom: 20px;}
 
     .app-nav { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; align-items: center; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); z-index: 1000; box-shadow: 0 -5px 25px rgba(0,0,0,0.03); }
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-sub); cursor: pointer; transition: color 0.2s; flex: 1;}
@@ -65,27 +60,26 @@
     .nav-item.active svg { transform: scale3d(1.15, 1.15, 1) translateY(-3px); }
 
     /* =========================================
-       3. PILL HEADERS & ADMIN ADD BUTTONS
+       3. FLOATING ACTION BUTTON (FAB)
        ========================================= */
+    .fab { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 95px); right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(37,99,235,0.4); border: none; cursor: pointer; z-index: 999; transition: transform 0.3s var(--spring), opacity 0.3s; opacity: 0; pointer-events: none; transform: scale(0.8) translateZ(0); }
+    .fab.visible { opacity: 1; pointer-events: auto; transform: scale(1) translateZ(0); }
+    .fab:active { transform: scale(0.9) translateZ(0); }
+    .fab svg { width: 26px; height: 26px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; fill: none;}
+
     @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 
-    .pill-header { background: var(--card-bg); border-radius: 20px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex-shrink: 0;}
-    .pill-header .brand-text { font-size: 17px; font-weight: 900; color: var(--primary); letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
-    .pill-header.sec-title .brand-text { color: var(--text-main); }
-    
-    .add-btn { background: var(--primary); color: white; border: none; border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s var(--spring); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
-    .add-btn:active { transform: scale(0.85); }
-    .add-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
-
     /* =========================================
-       4. DASHBOARD CARDS (Mobile Viewer Style)
+       4. DASHBOARD CARDS
        ========================================= */
+    .dash-title { font-size: 22px; font-weight: 900; color: var(--text-main); margin-bottom: 20px; letter-spacing: 0.5px; opacity: 0; animation: fadeInUp 0.4s var(--spring) forwards;}
+    
     .dash-list { display: flex; flex-direction: column; gap: 14px; width: 100%; }
-    .stat-card { border-radius: 20px; padding: 22px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: none; opacity: 0; animation: fadeInUp 0.6s var(--spring) forwards; }
-    .c-rev { background: linear-gradient(135deg, #34D399 0%, #059669 100%); color: white; animation-delay: 0.05s; }
-    .c-pend { background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%); color: white; animation-delay: 0.15s; }
-    .c-exp { background: linear-gradient(135deg, #F87171 0%, #DC2626 100%); color: white; animation-delay: 0.25s; }
-    .c-cust { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); animation-delay: 0.35s; }
+    .stat-card { border-radius: 20px; padding: 22px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--glass-border); opacity: 0; animation: fadeInUp 0.6s var(--spring) forwards; }
+    .c-rev { background: linear-gradient(135deg, #34D399 0%, #059669 100%); color: white; animation-delay: 0.05s; border:none;}
+    .c-pend { background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%); color: white; animation-delay: 0.15s; border:none;}
+    .c-exp { background: linear-gradient(135deg, #F87171 0%, #DC2626 100%); color: white; animation-delay: 0.25s; border:none;}
+    .c-cust { background: var(--card-bg); color: var(--text-main); animation-delay: 0.35s; }
     
     .stat-info { display: flex; flex-direction: column; align-items: flex-start; }
     .stat-info h4 { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px; opacity: 0.9;}
@@ -107,8 +101,7 @@
     .delete-bg { position: absolute; top: 0; right: 0; height: 100%; width: 90px; background: var(--danger); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; z-index: 1;} 
     .delete-bg svg { width: 26px; height: 26px; fill: none; stroke: white; stroke-width: 2.5; }
     
-    /* Sleek Admin Card Style */
-    .admin-card { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); cursor: pointer; position: relative; z-index: 2; overflow: hidden; transition: transform 0.35s var(--spring); }
+    .admin-card { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer; position: relative; z-index: 2; overflow: hidden; transition: transform 0.35s var(--spring); }
     .admin-card:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(0,0,0,0.01); }
     .admin-card.swiped { transform: translateX(-90px); }
 
@@ -126,33 +119,31 @@
     .card-date { font-size: 10px; color: var(--text-sub); font-weight: 800; letter-spacing: 0.5px;}
 
     /* =========================================
-       6. SETTINGS & EXPORTS
+       6. GROUPED SETUP BUTTONS
        ========================================= */
-    .setting-card { background: var(--card-bg); border-radius: 16px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
-    .setting-card span { font-size: 14px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px;}
-    
-    .big-print-btn { width: 100%; padding: 18px 20px; border-radius: 16px; background: var(--card-bg); border: 1px solid var(--glass-border); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; transition: transform 0.2s var(--spring); cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.02); letter-spacing: 0.5px;}
-    .big-print-btn:active { transform: scale3d(0.96, 0.96, 1); }
-    .big-print-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;}
-    
-    .big-print-btn.btn-cust { color: var(--primary); background: rgba(37, 99, 235, 0.05); border-color: rgba(37, 99, 235, 0.1);}
-    .big-print-btn.btn-staff { color: var(--warning); background: rgba(217, 119, 6, 0.05); border-color: rgba(217, 119, 6, 0.1);}
-    .big-print-btn.btn-exp { color: var(--danger); background: rgba(220, 38, 38, 0.05); border-color: rgba(220, 38, 38, 0.1);}
-    .big-print-btn.btn-cloud { color: #059669; background: rgba(5, 150, 105, 0.05); border-color: rgba(5, 150, 105, 0.1);}
-    .big-print-btn.btn-clear { color: white; background: var(--danger); border-color: transparent; box-shadow: 0 4px 15px rgba(220,38,38,0.3);}
-    
-    .ios-switch { position: relative; display: inline-block; width: 46px; height: 28px; } .ios-switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--glass-border); transition: .3s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 24px; width: 24px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); } input:checked + .slider { background-color: var(--success); } input:checked + .slider:before { transform: translate3d(18px,0,0); } html.dark-mode .slider { background-color: #334155; }
+    .grouped-buttons { display: flex; background: var(--box-bg); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
+    .grouped-buttons .gb-btn { flex: 1; padding: 18px 10px; border: none; background: transparent; font-weight: 800; font-size: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: background 0.2s; border-right: 1px solid var(--glass-border); letter-spacing: 0.5px;}
+    .grouped-buttons .gb-btn:last-child { border-right: none; }
+    .grouped-buttons .gb-btn:active { background: rgba(0,0,0,0.04); }
+    .grouped-buttons .gb-btn svg { width: 22px; height: 22px; stroke-width: 2.2; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round;}
+
+    .setting-label-head { font-size: 11px; font-weight: 900; color: var(--text-sub); margin: 5px 0 8px 5px; letter-spacing: 0.5px; }
+
+    .btn { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; transition: transform 0.2s var(--spring); width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(37,99,235,0.3); letter-spacing: 0.5px;} 
+    .btn:active { transform: scale(0.95); }
+    .btn.danger-btn { background: var(--danger); box-shadow: 0 4px 15px rgba(220,38,38,0.3); } 
+    .btn.outline-btn { background: transparent; color: var(--text-main); border: 2px solid var(--glass-border); box-shadow: none; }
 
     #toast { position: absolute; top: -80px; left: 50%; transform: translate3d(-50%, 0, 0); background: var(--text-main); color: var(--bg-main); padding: 12px 24px; border-radius: 30px; font-size: 12px; font-weight: 800; z-index: 9999; transition: transform 0.4s var(--spring); display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); letter-spacing: 0.5px;}
     #toast.show { transform: translate3d(-50%, calc(max(env(safe-area-inset-top), 40px)), 0); }
 
     /* =========================================
-       7. XY ANIMATION & MODALS
+       7. XY ANIMATION MODALS
        ========================================= */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 2000; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; } 
     .modal-overlay.show { opacity: 1; visibility: visible; }
     
-    .modal-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform-origin: var(--click-x) var(--click-y); transform: scale3d(0.01, 0.01, 1); opacity: 0; transition: transform 0.4s var(--app-launch), opacity 0.3s ease; pointer-events: none; } 
+    .modal-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform-origin: var(--click-x, 50vw) var(--click-y, 50vh); transform: scale3d(0.01, 0.01, 1); opacity: 0; transition: transform 0.4s var(--app-launch), opacity 0.3s ease; pointer-events: none; } 
     .modal-overlay.show .modal-wrapper { transform: scale3d(1, 1, 1); opacity: 1; pointer-events: auto; }
     
     .modal-box { width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border-radius: 24px; padding: 24px; position: relative; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.1); } 
@@ -163,15 +154,9 @@
     .close-modal-btn:active { transform: scale(0.85); } .close-modal-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
     
     .input-group { margin-bottom: 14px; width: 100%; } 
-    .input-group input, .input-group select { width: 100%; padding: 15px 16px; border-radius: 12px; border: 1px solid transparent; font-size: 14px; font-weight: 700; outline: none; background: var(--box-bg); color: var(--text-main); transition: 0.2s; text-align: center; font-family: inherit;} 
+    .input-group input, .input-group select { width: 100%; padding: 15px 16px; border-radius: 12px; border: 1px solid var(--glass-border); font-size: 14px; font-weight: 700; outline: none; background: var(--box-bg); color: var(--text-main); transition: 0.2s; text-align: center; font-family: inherit;} 
     .input-group input:focus, .input-group select:focus { border-color: var(--primary); background: transparent;} 
     .input-group input::placeholder { color: var(--text-sub); font-weight: 700; }
-    .setting-label { font-size: 11px; font-weight: 800; color: var(--text-sub); margin-bottom: 6px; display: block; margin-left: 5px; letter-spacing: 0.5px;}
-    
-    .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; transition: transform 0.2s var(--spring); width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(37,99,235,0.3); letter-spacing: 0.5px;} 
-    .btn:active { transform: scale(0.95); }
-    .btn.danger-btn { background: var(--danger); box-shadow: 0 4px 15px rgba(220,38,38,0.3); } 
-    .btn.outline-btn { background: transparent; color: var(--text-main); border: 2px solid var(--box-bg); box-shadow: none; }
     
     .att-btn { padding: 14px; border-radius: 12px; border: none; font-size: 13px; font-weight: 800; width: 100%; margin-bottom: 10px; cursor: pointer; color: white; transition: transform 0.2s var(--spring); letter-spacing: 0.5px;} 
     .att-btn.present { background: var(--success); box-shadow: 0 4px 12px rgba(5,150,105,0.3); } 
@@ -179,7 +164,7 @@
     .att-btn.absent { background: var(--danger); box-shadow: 0 4px 12px rgba(220,38,38,0.3); } 
     .att-btn:active { transform: scale(0.95); }
 
-    .live-calc-box { background: var(--box-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; } 
+    .live-calc-box { background: var(--box-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--glass-border);} 
     .calc-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--text-sub);} 
     .calc-row span:last-child { color: var(--text-main); font-variant-numeric: tabular-nums; }
     .calc-row.total { font-size: 15px; border-top: 1px dashed var(--glass-border); padding-top: 10px; margin-top: 4px; color: var(--primary);} 
@@ -196,8 +181,6 @@
 </head>
 <body>
 
-<div class="bg-mesh"></div>
-
 <div id="app">
 
     <div id="toast">
@@ -205,15 +188,16 @@
         <span id="toast-msg">SUCCESS</span>
     </div>
 
+    <!-- GLOBAL FAB (Floating Action Button) -->
+    <button class="fab" id="main-fab" onclick="handleFabClick(event)">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
+
     <!-- TAB 1: DASHBOARD -->
     <div id="sec1" class="section active">
-        <div class="pill-header">
-            <span class="brand-text">ADMIN PRO</span>
-            <button class="add-btn" style="background:var(--box-bg); color:var(--text-main); box-shadow:none;" onclick="switchTab(5, document.querySelectorAll('.nav-item')[4])"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"></path></svg></button>
-        </div>
         <div class="content-wrapper">
+            <h2 class="dash-title">DASHBOARD</h2>
             <div class="dash-list">
-                <!-- Mobile Viewer Style Stacked Dashboard Cards -->
                 <div class="stat-card c-rev">
                     <div class="stat-info"><h4>Total Revenue</h4><h2 id="dash-rev">₹0</h2></div>
                     <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M7 4h10"></path><path d="M7 9h10"></path><path d="M9 4h3c3.5 0 4 5 0 5"></path><path d="M9 14l5.5 7"></path></svg></div>
@@ -236,80 +220,65 @@
 
     <!-- TAB 2: CLIENTS -->
     <div id="sec2" class="section">
-        <div class="pill-header sec-title">
-            <span class="brand-text">CLIENTS</span>
-            <button class="add-btn" onclick="openModal(event, 'addCustomerModal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        <div class="content-wrapper">
+            <h2 class="dash-title">CLIENTS</h2>
+            <div id="customer-list"></div>
         </div>
-        <div class="content-wrapper"><div id="customer-list"></div></div>
     </div>
 
     <!-- TAB 3: STAFF -->
     <div id="sec3" class="section">
-        <div class="pill-header sec-title">
-            <span class="brand-text">STAFF</span>
-            <button class="add-btn" onclick="openModal(event, 'addWorkerModal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        <div class="content-wrapper">
+            <h2 class="dash-title">STAFF</h2>
+            <div id="worker-list"></div>
         </div>
-        <div class="content-wrapper"><div id="worker-list"></div></div>
     </div>
 
     <!-- TAB 4: EXPENSES -->
     <div id="sec4" class="section">
-        <div class="pill-header sec-title">
-            <span class="brand-text">EXPENSES</span>
-            <button class="add-btn" onclick="openModal(event, 'addExpenseModal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        <div class="content-wrapper">
+            <h2 class="dash-title">EXPENSES</h2>
+            <div id="expense-list"></div>
         </div>
-        <div class="content-wrapper"><div id="expense-list"></div></div>
     </div>
 
-    <!-- TAB 5: PREFERENCES (Settings, Backup, Export) -->
+    <!-- TAB 5: PREFERENCES / SETUP -->
     <div id="sec5" class="section">
-        <div class="pill-header sec-title">
-            <span class="brand-text">PREFERENCES</span>
-        </div>
         <div class="content-wrapper">
-            <div class="setting-card">
-                <span>Dark Mode</span>
-                <label class="ios-switch">
-                    <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
-                    <span class="slider"></span>
-                </label>
+            <h2 class="dash-title">SETUP</h2>
+            
+            <div class="setting-label-head">CLOUD SYNC</div>
+            <div class="grouped-buttons">
+                <button class="gb-btn" style="color: #059669;" onclick="manualCloudBackup(event)">
+                    <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M12 11v6"></path><path d="M9 14l3-3 3 3"></path></svg>
+                    BACKUP
+                </button>
+                <button class="gb-btn" style="color: #D97706;" onclick="manualCloudRestore(event)">
+                    <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M12 11v6"></path><path d="M9 14l3 3 3-3"></path></svg>
+                    RESTORE
+                </button>
             </div>
-            <button class="big-print-btn" onclick="openModal(event, 'timingModal')">
-                Set Default Timings
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            </button>
 
-            <hr>
+            <div class="setting-label-head">DATA EXPORT</div>
+            <div class="grouped-buttons">
+                <button class="gb-btn" style="color: var(--primary);" onclick="exportDataImage('customers')">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    CLIENTS
+                </button>
+                <button class="gb-btn" style="color: var(--warning);" onclick="exportDataImage('workers')">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    STAFF
+                </button>
+                <button class="gb-btn" style="color: var(--danger);" onclick="exportDataImage('expenses')">
+                    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    EXPENSES
+                </button>
+            </div>
 
-            <button class="big-print-btn btn-cloud" onclick="manualCloudBackup(event)">
-                Backup Data To Cloud
-                <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M12 11v6"></path><path d="M9 14l3-3 3 3"></path></svg>
-            </button>
-            <button class="big-print-btn btn-cloud" style="color:#D97706; background:rgba(217, 119, 6, 0.05); border-color:rgba(217, 119, 6, 0.1);" onclick="manualCloudRestore(event)">
-                Restore Data From Cloud
-                <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path><path d="M12 11v6"></path><path d="M9 14l3 3 3-3"></path></svg>
-            </button>
-
-            <hr>
-
-            <button class="big-print-btn btn-cust" onclick="exportDataImage('customers')">
-                Download Clients Data
-                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            </button>
-            <button class="big-print-btn btn-staff" onclick="exportDataImage('workers')">
-                Download Staff Data
-                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            </button>
-            <button class="big-print-btn btn-exp" onclick="exportDataImage('expenses')">
-                Download Expenses Data
-                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            </button>
-
-            <hr>
-            <button class="big-print-btn btn-clear" onclick="clearAllData(event)">
-                CLEAR ALL DATA
-                <svg viewBox="0 0 24 24" stroke="white"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            </button>
+            <div class="setting-label-head">CONFIGURATION</div>
+            <button class="btn outline-btn" style="margin-bottom: 15px;" onclick="openModal(event, 'timingModal')">SET DEFAULT TIMINGS</button>
+            
+            <button class="btn btn-clear" onclick="clearAllData(event)">CLEAR ALL APP DATA</button>
         </div>
     </div>
 
@@ -406,7 +375,7 @@
             </div>
             <label class="setting-label" style="margin-top:10px;">GIVE ADVANCE</label>
             <div class="input-group"><input type="number" id="att-advance" placeholder="ADVANCE AMOUNT (₹)"></div>
-            <button class="btn" style="margin-bottom:15px; background:var(--text-main); color:var(--bg-main);" onclick="saveAdvanceOnly()">SAVE TIME & ADVANCE ONLY</button>
+            <button class="btn outline-btn" style="margin-bottom:15px;" onclick="saveAdvanceOnly()">SAVE TIME & ADVANCE ONLY</button>
             <hr>
             <button class="att-btn present" onclick="markAttendance('PRESENT')">MARK PRESENT</button>
             <button class="att-btn half" onclick="markAttendance('HALF DAY')">MARK HALF DAY</button>
@@ -471,8 +440,9 @@
     const docRef = doc(db, 'appData', 'techAsar'); 
     const backupDocRef = doc(db, 'appData', 'techAsar_backup'); // Manual Backup Doc
 
-    window.appData = { customers: [], workers: [], expenses: [], settings: { timeIn: '', timeOut: '', halfDay: '', darkMode: false } };
+    window.appData = { customers: [], workers: [], expenses: [], settings: { timeIn: '', timeOut: '', halfDay: '' } };
     let isInitialLoad = true;
+    let currentTab = 1;
 
     // --- SMART NETWORK RESUME ---
     document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { disableNetwork(db).then(() => enableNetwork(db)); } });
@@ -521,9 +491,19 @@
     window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000); };
     
     window.switchTab = function(tabId, el) { 
+        currentTab = tabId;
         document.querySelectorAll('.section').forEach(s => { let id = parseInt(s.id.replace('sec', '')); s.classList.remove('active', 'slide-left', 'slide-right'); if (id < tabId) s.classList.add('slide-left'); else if (id > tabId) s.classList.add('slide-right'); }); 
         document.getElementById('sec' + tabId).classList.remove('slide-left', 'slide-right'); document.getElementById('sec' + tabId).classList.add('active'); 
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); 
+        
+        const fab = document.getElementById('main-fab');
+        if(tabId >= 2 && tabId <= 4) { fab.classList.add('visible'); } else { fab.classList.remove('visible'); }
+    };
+
+    window.handleFabClick = function(e) {
+        if(currentTab === 2) window.openModal(e, 'addCustomerModal');
+        if(currentTab === 3) window.openModal(e, 'addWorkerModal');
+        if(currentTab === 4) window.openModal(e, 'addExpenseModal');
     };
     
     let confirmAction = null;
@@ -658,7 +638,6 @@
 
     window.deleteItem = function(e, type, id) { e.stopPropagation(); window.showCustomConfirm(e, "ARE YOU SURE YOU WANT TO DELETE THIS ITEM?", () => { if(type === 'cust') window.appData.customers = window.appData.customers.filter(c => c.id !== id); if(type === 'work') window.appData.workers = window.appData.workers.filter(w => w.id !== id); if(type === 'exp') window.appData.expenses = window.appData.expenses.filter(e => e.id !== id); window.saveData(); window.showToast("ITEM DELETED"); }); };
 
-    window.toggleDarkMode = function() { window.appData.settings.darkMode = document.getElementById('dark-mode-toggle').checked; if(window.appData.settings.darkMode) document.documentElement.classList.add('dark-mode'); else document.documentElement.classList.remove('dark-mode'); window.saveData(); };
     window.saveSettings = function() { window.appData.settings.timeIn = document.getElementById('s-timein').value; window.appData.settings.timeOut = document.getElementById('s-timeout').value; window.appData.settings.halfDay = document.getElementById('s-halfday').value; window.saveData(); window.forceCloseModals(); window.showToast("TIMINGS SAVED"); };
     window.clearAllData = function(e) { window.showCustomConfirm(e, "THIS WILL DELETE ALL DATA FOREVER!", () => { window.appData.customers = []; window.appData.workers = []; window.appData.expenses = []; window.saveData(); window.showToast("ALL DATA CLEARED"); }); };
 
@@ -693,7 +672,7 @@
         });
     };
 
-    window.applySettings = function() { if(document.getElementById('e-date')) document.getElementById('e-date').valueAsDate = new Date(); document.getElementById('s-timein').value = window.appData.settings.timeIn || ''; document.getElementById('s-timeout').value = window.appData.settings.timeOut || ''; document.getElementById('s-halfday').value = window.appData.settings.halfDay || ''; if(window.appData.settings.darkMode) { document.documentElement.classList.add('dark-mode'); document.getElementById('dark-mode-toggle').checked = true; } };
+    window.applySettings = function() { if(document.getElementById('e-date')) document.getElementById('e-date').valueAsDate = new Date(); document.getElementById('s-timein').value = window.appData.settings.timeIn || ''; document.getElementById('s-timeout').value = window.appData.settings.timeOut || ''; document.getElementById('s-halfday').value = window.appData.settings.halfDay || ''; };
 
     // Export Logic HD
     window.generateAndDownloadHDImage = function(htmlContent, filename) {
